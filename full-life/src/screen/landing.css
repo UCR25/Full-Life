@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.navbar {
+    width: 90%;
+    top: 0;
+    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 10px 7%;
+    transition: 0.5s;
+    position: fixed;
+    border-radius: 40px;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1); /* translucent white */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+    font-weight: bold;
+    padding-right: 15px;
+    font-size: 20px;
+    font-family: "Roboto", sans-serif;
+}
+
+/* ul{
+    flex: 1;
+    list-style: none;
+    text-align: center;
+} */
+
+ul li{
+    display: inline-block;
+    margin: 10px 20px;
+    font-size: 1;
+    cursor: pointer;
+}
+
+p, h1 {
+    font-size: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+    font-family: "Funnel Display", sans-serif;
+}
