@@ -6,16 +6,33 @@ const Landing = () => {
     <>
       <div className='navbar'>
         <div className="title">Full-Life</div>
-            <ul>
-                {/* change these to buttons */}
-                <li>Login</li>  
-                <li>Sign Up</li>
-            </ul>
+        <div className='user-account'>
+          <button 
+            type="submit" 
+            className="navsign-button"
+          >
+            Signup
+          </button>
+          <button 
+            type="submit" 
+            className="navlogin-button"
+          >
+            Log In
+          </button>
+        </div>
+        
       </div>
 
-      <p>Welcome to Full-Life</p>
-      <h1>Manage Your Task Efficiently</h1>
-      {/* another button that allows login */}
+      <div className='intro-message'>
+        <h1>Welcome to Full-Life</h1>
+        <p>Manage Your Task Efficiently</p>
+        <button 
+          type="submit" 
+          className="login-button"
+        >
+          Login
+        </button>
+      </div>
     </>
   )
 }
