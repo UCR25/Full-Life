@@ -170,3 +170,57 @@ p {
     background: radial-gradient(circle at 0% 100%, rgba(0, 168, 255, 0.4) 0%, transparent 70%);
     pointer-events: none;
 }
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) scale(1.1);
+        opacity: 0;
+    }
+}
+
+.floating-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background:white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp 5s ease-in-out infinite;
+}
+
+.floating-dot:nth-child(1) {
+    left: 48%;
+    top: calc(50% - 100px);
+    animation-delay: 0s;
+}
+
+.floating-dot:nth-child(2) {
+    left: 50%;
+    top: calc(50% - 100px);
+    animation-delay: 1s;
+}
+
+.floating-dot:nth-child(3) {
+    left: 52%;
+    top: calc(50% - 100px);
+    animation-delay: 3s;
+}
+
+.floating-dot:nth-child(4) {
+    left: 51%;
+    top: calc(50% - 100px);
+    animation-delay: 2s;
+}
+
+.floating-dot:nth-child(5) {
+    left: 49%;
+    top: calc(50% - 100px);
+    animation-delay: 2s;
+}

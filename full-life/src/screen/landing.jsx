@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './landing.css';
 
 const Landing = () => {
@@ -27,6 +28,11 @@ const Landing = () => {
       </div>
 
       <div className='intro-message'>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
+        <div className="floating-dot"></div>
         <h1>Welcome to Full-Life</h1>
         <p>Manage Your Task Efficiently</p>
         <button 
