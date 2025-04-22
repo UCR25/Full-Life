@@ -3,7 +3,10 @@ import './landing.css';
 
 const Landing = () => {
   return (
-    <>
+    <div className='background'>
+      <div className="planet-arc top-right" />
+      <div className="planet-arc bottom-left" />
+
       <div className='navbar'>
         <div className="title">Full-Life</div>
         <div className='user-account'>
@@ -33,7 +36,7 @@ const Landing = () => {
           Login
         </button>
       </div>
-    </>
+    </div>
   )
 }
 

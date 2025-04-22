@@ -12,8 +12,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  /* background: linear-gradient(to bottom, #B3E5FC, #FFE0B2); */
-  background: linear-gradient(180deg, #041325 0%, #000000 100%);
+  /* background: linear-gradient(180deg, #041325 0%, #000000 100%); */
+  background: radial-gradient(circle at 50% 120%, #050d18 0%, #01060f 50%, #000000 100%);
 }
 
 #root {
