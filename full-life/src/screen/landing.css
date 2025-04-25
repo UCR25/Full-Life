@@ -197,30 +197,30 @@ p {
 
 .floating-dot:nth-child(1) {
     left: 48%;
-    top: calc(50% - 100px);
+    top: calc(50% - 180px);
     animation-delay: 0s;
 }
 
 .floating-dot:nth-child(2) {
     left: 50%;
-    top: calc(50% - 100px);
+    top: calc(50% - 180px);
     animation-delay: 1s;
 }
 
 .floating-dot:nth-child(3) {
     left: 52%;
-    top: calc(50% - 100px);
+    top: calc(50% - 180px);
     animation-delay: 3s;
 }
 
 .floating-dot:nth-child(4) {
     left: 51%;
-    top: calc(50% - 100px);
+    top: calc(50% - 180px);
     animation-delay: 2s;
 }
 
 .floating-dot:nth-child(5) {
     left: 49%;
-    top: calc(50% - 100px);
+    top: calc(50% - 180px);
     animation-delay: 2s;
 }

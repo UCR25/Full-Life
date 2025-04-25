@@ -34,15 +34,13 @@ const Landing = () => {
         <div className="floating-dot"></div>
         <div className="floating-dot"></div>
         <h1>Welcome to Full-Life</h1>
-        <p>Manage Your Tasks Efficiently</p>
+        <p>Live life to the fullest with Full-Life.<br/>Browse a selection of catered activities within your<br/>local area and effortlessly add them to your calendar<br/>across all your platforms.</p>
         <button 
           type="submit" 
           className="login-button"
         >
           Login
         </button>
-
-        <p>Live life to the fullest with Full-Life.<br/>Browse a selection of catered activities within your<br/>local area and effortlessly add them to your calendar<br/>across all your platforms.</p>
       </div>
     </div>
   )
