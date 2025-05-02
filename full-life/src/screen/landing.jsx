@@ -17,12 +17,14 @@ const Landing = () => {
           >
             Signup
           </button>
-          <button 
-            type="submit" 
-            className="navlogin-button"
-          >
-            Log In
-          </button>
+          <Link to="/login">
+            <button 
+              type="submit" 
+              className="navlogin-button"
+            >
+              Log In
+            </button>
+          </Link>
         </div>
         
       </div>
@@ -35,12 +37,14 @@ const Landing = () => {
         <div className="floating-dot"></div>
         <h1>Welcome to Full-Life</h1>
         <p>Live life to the fullest with Full-Life.<br/>Browse a selection of catered activities within your<br/>local area and effortlessly add them to your calendar<br/>across all your platforms.</p>
-        <button 
-          type="submit" 
-          className="login-button"
-        >
-          Login
-        </button>
+        <Link to="/login">
+          <button 
+            type="submit" 
+            className="login-button"
+          >
+            Login
+          </button>
+        </Link>
       </div>
     </div>
   )
