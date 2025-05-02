@@ -1,3 +1,89 @@
 .login-container {
-    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #0d0f20;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+}
+
+.login-card {
+  display: flex;
+  width: 90%;
+  max-width: 1200px;
+  height: 80vh;
+  background: #0e1024;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-left {
+  flex: 1;
+  position: relative;
+  background: radial-gradient(#050d18 0%, #01060f 50%, #000000 100%);
+  overflow: hidden;
+  padding: 90px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.logo {
+  width: 20%;
+  margin-bottom: 40px;
+}
+
+.login-right h1 {
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.email-display {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  font-size: 14px;
+}
+
+.google-btn-container {
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 240px;
+  display: flex;
+  justify-content: center;
+}
+
+.register-link {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.register-link a {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .login-left {
+    display: none;
+  }
+  
+  .login-right {
+    padding: 30px 20px;
+  }
 }

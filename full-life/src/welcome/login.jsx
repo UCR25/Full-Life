@@ -1,12 +1,55 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './login.css';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+import projLogo from '../assets/logov3.png';
+import Stars from './Stars';
 
 const Login = () => {
+  const navigate = useNavigate()
+
+  function handleLogin() {
+    googleLogout()
+  }
+
   return (
     <div className="login-container">
-      
+      <div className="login-card">
+        <div className="login-left">
+          <Stars />
+        </div>
+        
+        <div className="login-right">
+          <img className='logo' src={projLogo} alt='Project Logo' />
+          
+          <h1>Welcome to Full-Life 👋</h1>
+          <p className="email-display">Sign in with your Google account</p>
+          
+          <div className="google-btn-container">
+            <GoogleLogin 
+              onSuccess={(credentialResponse) => {
+                console.log(credentialResponse.credential);
+                console.log(jwtDecode(credentialResponse.credential));
+              }}
+              onError={() => { console.log('Login Failed'); }}
+              auto_select={true} // allows users to stay logged in
+
+              useOneTap
+              type="standard"
+              theme="filled_black"
+              text="signin_with"
+              shape="rectangular"
+              size="large"
+            />
+          </div>
+          
+          <p className="register-link">
+            Don't have an account? <Link to="/signup">Register</Link>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
