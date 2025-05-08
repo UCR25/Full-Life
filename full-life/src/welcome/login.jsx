@@ -21,7 +21,7 @@ const Login = () => {
         <div className="login-left">
           <h1>Full-Life</h1>
           <img className='logo' src={idkLogo} alt='Project Logo' />
-          <p>Live life to the fullest</p>
+          <p1>Live life to the fullest</p1>
         </div>
         
         <div className="login-right">
