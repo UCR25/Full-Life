@@ -4,7 +4,7 @@ import './login.css';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import projLogo from '../assets/logov3.png';
+import idkLogo from '../assets/calendar1.png';
 import Stars from './Stars';
 
 const Login = () => {
@@ -16,16 +16,18 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <Stars />
       <div className="login-card">
         <div className="login-left">
-          <Stars />
+          <h1>Full-Life</h1>
+          <img className='logo' src={idkLogo} alt='Project Logo' />
+          <p>Live life to the fullest</p>
         </div>
         
         <div className="login-right">
-          <img className='logo' src={projLogo} alt='Project Logo' />
           
-          <h1>Welcome to Full-Life 👋</h1>
-          <p className="email-display">Sign in with your Google account</p>
+          <h1>Welcome Back 👋</h1>
+          <p>Sign in with your Google account</p>
           
           <div className="google-btn-container">
             <GoogleLogin 

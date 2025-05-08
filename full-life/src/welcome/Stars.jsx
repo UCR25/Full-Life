@@ -30,23 +30,6 @@ const Stars = () => {
         // newly created div appended to starsContainer
         starsContainer.appendChild(star);
       }
-
-      // Create shooting stars
-      const numShootingStars = 3;
-      for (let i = 0; i < numShootingStars; i++) {
-        const shootingStar = document.createElement('div');
-        shootingStar.className = 'shooting-star';
-        
-        const startTop = Math.random() * 40;
-        const startRight = Math.random() * 20;
-        
-        shootingStar.style.top = `${startTop}%`;
-        shootingStar.style.right = `${startRight}%`;
-        
-        shootingStar.style.animationDelay = `${i * 3 + Math.random() * 2}s`;
-        
-        starsContainer.appendChild(shootingStar);
-      }
     };
 
     createStars();
