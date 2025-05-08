@@ -4,6 +4,7 @@ import './login.css';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { MdArrowBackIosNew } from 'react-icons/md';
 import idkLogo from '../assets/calendar1.png';
 import Stars from './Stars';
 
@@ -19,6 +20,10 @@ const Login = () => {
       <Stars />
       <div className="login-card">
         <div className="login-left">
+          <div className="back-button" onClick={() => navigate(-1)}>
+            <MdArrowBackIosNew size={18} />
+            <span>BACK</span>
+          </div>
           <h1>Full-Life</h1>
           <img className='logo' src={idkLogo} alt='Project Logo' />
           <p1>Live life to the fullest</p1>

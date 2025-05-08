@@ -54,6 +54,20 @@
   text-align: center;
 }
 
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+}
+
 .logo {
   width: 80%;
 }
