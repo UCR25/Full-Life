@@ -88,6 +88,7 @@ const Signup = () => {
                         onError={() => console.log("Login failed!")}
                         shape="pill"
                         cancel_on_tap_outside={true}
+                        useOneTap={true}
                         />
                     }
                     </div>
