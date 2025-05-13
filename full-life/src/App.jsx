@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Landing from './screen/landing'
+import Landing from './welcome/landing'
 import Login from './welcome/login'
 
 function App() {
