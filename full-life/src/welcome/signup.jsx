@@ -1,17 +1,12 @@
 import React, { useState , useNavigate} from 'react';
-import { Link } from 'react-router-dom';
 import { GoogleLogin, googleLogout} from '@react-oauth/google';
 import './signup.css';
 import logo  from '../assets/logov3.png';
+import FocusBubble from './focusBubble';
 
 const Signup = () => {
     const [displayName, setDisplayName] = useState("");
     const [ZIP, setZIP] = useState("");
-    const [errors, setErrors] = useState({
-        displayName: "",
-        zipCode: "",
-        google: ""
-      });
     const [googleCredential, setGoogleCredential] = useState(null);
     
     const handleLogout = () => {
@@ -32,82 +27,27 @@ const Signup = () => {
         }
       };
   return (
-        <div className="background">
-            <div className="textPanel">
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="floating-dot"></div>
-                <div className="logo-container">
-                    <div className="orb-wrapper">
-                        <div className="orb-circle clockwise" style={{ transform: "rotate(0deg) translateX(40px)", animation: "rotate-clockwise 12s linear infinite" }}></div>
-                        <div className="orb-circle counterclockwise" style={{ transform: "rotate(0deg) translateX(60px)", animation: "rotate-counterclockwise 20s linear infinite" }}></div>
-                        <div className="orb-circle clockwise" />
-                        <div className="orb-circle counterclockwise" />
-                    </div>
-                    <img src={logo} alt="Full-Life Logo" className="logo" />
-                    </div>
-                <h1>Welcome👋</h1>
-                <h3>Ready to lead a Full-Life?</h3>
+    <section className="body">
+        <section className="title-panel flex padding4">
+            {/* Back Button*/}
+            <div className="logo-wrapper flex">
+                <img src={logo} alt="Full-Life Logo" className="logo" />
+                <FocusBubble className="focus-bubble"/>
             </div>
-            <div className="formPanel">
-                <h2>Get Started!</h2>
+            <h1 className="text-xl font-bold">Welcome👋</h1>
+            <h2 className="text-lg accent">Ready to lead a Full-Life?</h2>
+        </section>
+        <section className="form-panel">
+            <div className="form-wrapper">
+                <h2 className="text-md font-regular form-prompt"></h2>
                 <form onSubmit={handleSubmit}>
-                    <p>Display Name</p>
-                    <input
-                        type="text"
-                        placeholder="Enter display name"
-                        value={displayName}
-                        onChange={(e)=>setDisplayName(e.target.value)}
-                        required={true}
-                        className="signup-field"
-                    ></input>
-                    {errors.displayName && <div className="errorMessage">{errors.displayName}</div>}
-                    <p>ZIP Code</p>
-                    <input
-                        type="number"
-                        placeholder="Enter ZIP Code"
-                        value={ZIP}
-                        onChange={(e)=>setZIP(e.target.value)}
-                        required={true}
-                        className="signup-field"
-                        /*pattern prop can be used w/ regex to test if form is right */
-                    ></input>
-                    {errors.zipCode && <div className="errorMessage">{errors.zipCode}</div>}
-                    <div className="google-login-wrapper">
-                    {googleCredential 
-                    ? <p>You are logged in with Google!</p>
-                    : <GoogleLogin 
-                        onSuccess={(credentialResponse) => setGoogleCredential(credentialResponse)}
-                        onError={() => console.log("Login failed!")}
-                        shape="pill"
-                        cancel_on_tap_outside={true}
-                        useOneTap={true}
-                        />
-                    }
-                    </div>
-                    {errors.google && <div className="errorMessage">{errors.google}</div>}
-                    <button 
-                        type="submit" 
-                        className="submit-button" 
-                        disabled={!(
-                            displayName.trim() && 
-                            ZIP.trim() && 
-                            googleCredential
-                        )}>
-                        Create Account
-                        </button>
-                    {/*<div className="errorMessage submitButton"/>*/}
+                    <input></input>
+                    {/* Next button */}
                 </form>
             </div>
-        </div>
-  )
+        </section>
+    </section>
+    )
 }
 
 export default Signup
