@@ -11,12 +11,14 @@ const Landing = () => {
       <div className='navbar'>
         <div className="title">Full-Life</div>
         <div className='user-account'>
-          <button 
-            type="submit" 
-            className="navsign-button"
-          >
-            Signup
-          </button>
+          <Link to="/signup">
+            <button 
+              type="submit" 
+              className="navsign-button"
+            >
+              Signup
+            </button>
+          </Link>
           <Link to="/login">
             <button 
               type="submit" 

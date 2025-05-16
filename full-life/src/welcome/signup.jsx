@@ -30,7 +30,7 @@ const Signup = () => {
         }
       };
   return (
-    <>
+    <div className="page">
         <Stars/>
         <section className="body">
             <section className="title-panel flex padding4">
@@ -49,7 +49,7 @@ const Signup = () => {
                 <Form/>
             </section>
         </section>
-    </>
+    </div>
     )
 }
 

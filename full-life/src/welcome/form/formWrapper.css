@@ -5,7 +5,7 @@
     justify-content: start;
     flex: 1;
 }
-h2 {
+.form-wrapper h2 {
     width: 100%;
     text-align: center;
     margin: 0;
