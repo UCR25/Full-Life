@@ -39,6 +39,9 @@ const Login = () => {
               onSuccess={(credentialResponse) => {
                 console.log(credentialResponse.credential);
                 console.log(jwtDecode(credentialResponse.credential));
+
+                navigate('/user-home');
+                localStorage.setItem('user', JSON.stringify(jwtDecode(credentialResponse.credential)));
               }}
               onError={() => { console.log('Login Failed'); }}
               auto_select={true} // allows users to stay logged in

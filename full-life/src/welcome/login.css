@@ -15,8 +15,8 @@
   display: flex;
   width: 90%;
   max-width: 1000px;
-  height: 65vh;
-  background: rgba(255, 255, 255, 0.05); /* rgba(185, 54, 54, 0.05) */
+  height: 70vh;
+  background: rgba(255, 255, 255, 0.05); 
   border-radius: 30px;
   overflow: hidden;
   position: relative;
@@ -73,11 +73,9 @@
 }
 
 .login-left h1 {
-  font-size: 42px;
+  font-size: 45px;
   font-weight: 700;
-  font-family: 'Orbitron', sans-serif;
-  /* background: #9b6ee4; */
-  background: rgba(0, 168, 255, 0.9);
+  background: white;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -89,6 +87,7 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 20px;
   margin-bottom: 40px;
+  font-weight: 600;
 }
 
 .login-right h1 {
@@ -122,6 +121,10 @@
 .register-link a {
   color: white;
   text-decoration: underline;
+}
+
+.register-link a:hover {
+  color: rgb(59, 179, 248);
 }
 
 /* Responsive adjustments */

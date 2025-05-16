@@ -9,6 +9,8 @@ const HomeNavbar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   return (
     <div className="navbar-container">
       <nav className="home-navbar">
@@ -35,7 +37,9 @@ const HomeNavbar = () => {
             <div className="dropdown-avatar-icon">
               <i className="fas fa-user"></i>
             </div>
-            <span className="dropdown-username">John Doe</span>
+            <span className="dropdown-username">
+              {user?.name || user?.given_name || 'Guest'}
+            </span>
           </div>
           <div className="dropdown-divider"></div>
           <Link to="/profile" className="dropdown-item">
@@ -53,7 +57,7 @@ const HomeNavbar = () => {
             <span>Help & Support</span>
             <span className="dropdown-arrow">›</span>
           </Link>
-          <Link to="/logout" className="dropdown-item">
+          <Link to="/login" className="dropdown-item">
             <span className="dropdown-icon"><i className="fas fa-sign-out-alt"></i></span>
             <span>Logout</span>
             <span className="dropdown-arrow">›</span>
