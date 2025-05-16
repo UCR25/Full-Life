@@ -1,0 +1,113 @@
+:root {
+    --bubble-size: 8.125rem;
+    --bubble-color100: rgba(156, 243, 243, 0.9); /* Center */
+    --bubble-color200: rgba(0, 255, 255, 0.4); /* Inner */
+    --bubble-color300: rgba(0, 80, 100, 0.2); /* Outer */
+    --bubble-color400: rgba(0, 40, 60, 0.03); /* Outside */
+    --bubble-color500: rgba(172, 255, 255, 0.6); /* Glow */
+    --bubble-color600: rgba(0, 255, 255, 0.5); /* Glow (Outer)*/
+    --bubble-color700: rgba(0, 255, 255, 0.3); /* Glow (Wide) */
+
+    --bubble-color800: rgba(0, 255, 255, 0.2); /* Pulse Wide */
+
+    --bubble-color900: rgba(222, 163, 253, 0.6);
+    --bubble-color1000: rgba(211, 130, 255, 0.3);
+    --bubble-color1100: rgba(238, 206, 255, 0.2);
+
+    --bubble-fill1: radial-gradient(circle at center, rgba(0, 255, 255, 0.9), rgba(0, 80, 100, 0.1));
+    --bubble-fill2: radial-gradient(circle at center, rgba(150, 255, 255, 0.7));
+    --bubble-fill3: radial-gradient(circle at center, rgba(255, 255, 255, 0.9), rgba(100, 100, 100, 0.1));
+    --bubble-fill4: radial-gradient(circle at center, rgba(234, 194, 255, 0.8), rgba(234, 148, 255, 0.1));
+    --bubble-fill5: radial-gradient(circle at center, rgba(193, 255, 255, 0.9), rgba(0, 80, 100, 0.1));
+
+
+}
+.bubble-wrapper {
+    position: absolute;
+    width: var(--bubble-size);
+    height: var(--bubble-size);
+  }
+.bubble {
+    position: absolute;
+    width: var(--bubble-size);
+    height: var(--bubble-size);
+    border-radius: 50%;
+    opacity: 0.5;
+    background: radial-gradient(    circle at center,
+    var(--bubble-color100) 0%,     /* bright cyan center */
+    var(--bubble-color200) 40%,
+    var(--bubble-color300) 70%,
+    var(--bubble-color400) 100%     /* fades to near-transparent */
+  );
+    box-shadow:
+      0 0 15px var(--bubble-color500),  /* glow */
+      0 0 25px var(--bubble-color600),  /* outer blur */
+      0 0 50px var(--bubble-color700);  /* softer wide glow */
+    z-index: 1;
+    overflow: hidden;
+}
+.rotate-cw:nth-child(1) {
+    animation: pulse 3s ease-in-out infinite, pulse-color 5s ease-in-out infinite, rotate-cw 10s linear infinite
+}
+.rotate-cw:nth-child(2) {
+    animation: pulse 3s ease-in-out infinite, pulse-color 5s ease-in-out infinite, rotate-cw 12s linear infinite;
+}
+.rotate-ccw:nth-child(1) {
+    animation: pulse 5s ease-in-out infinite, pulse-color 10s ease-in-out infinite, rotate-ccw 10s linear infinite;
+}
+.rotate-ccw:nth-child(2) {
+    animation: pulse 5s ease-in-out infinite, pulse-color 10s ease-in-out infinite, rotate-ccw 20s linear infinite;
+}
+.bubble::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 10px var(--bubble-color600),   /* inner neon edge */
+      inset 0 0 20px var(--bubble-color700);   /* softer inner glow */
+  }
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+    15% { transform: translate(0, 0) scale(1.2); opacity: 0.9; }
+  }
+  @keyframes pulse-color {
+    0% {
+      background: var(--fill1);
+      box-shadow:
+        0 0 15px var(--bubble-color600),
+        0 0 40px var(--bubble-color700),
+        0 0 60px var(--bubble-color800);
+    }
+    25% {
+      background: var(--fill2);
+    }
+    50% {
+      background: var(--fill3);
+    }
+    75% {
+      background: var(--fill4);
+      box-shadow:
+        0 0 25px var(--bubble-color900),
+        0 0 60px var(--bubble-color1000),
+        0 0 80px var(--color1100);
+    }
+    100% {
+      background: var(--fill5);
+      box-shadow:
+        0 0 15px var(--bubble-color500),
+        0 0 40px var(--bubble-color700),
+        0 0 60px var(--bubble-color800);
+    }
+  }
+  @keyframes rotate-cw {
+    0% { transform: rotate(0deg) translateX(calc(var(--bubble-size) / 6)) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(calc(var(--bubble-size) / 6)) rotate(-360deg); }
+  }
+  
+  @keyframes rotate-ccw {
+    0% { transform: rotate(0deg) translateX(calc(-1 * (var(--bubble-size) / 6))) rotate(0deg); }
+    100% { transform: rotate(-360deg) translateX(calc(-1 * (var(--bubble-size) / 6))) rotate(360deg); }
+  }
