@@ -1,4 +1,3 @@
-from category import Category
 from typing   import list
 
 class Category:
