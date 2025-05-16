@@ -1,4 +1,4 @@
-import { FormWrapper } from "./FormWrapper"
+import { FormWrapper } from "./formWrapper"
 
 export function FormPage1({ firstName, lastName, age, updateFields }) {
   return (

@@ -22,9 +22,3 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 
-
-# commands to run to add project in docker
-# docker build -t full-life . 
-# docker run -d -p 3000:80 full-life
-# if docker gives a weird name, docker run -d --name full-life -p 3000:80 full-life
-# docker start full-life
