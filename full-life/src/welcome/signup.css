@@ -1,7 +1,7 @@
 /* Main Styling */
 .page {
     display: flex;
-    background-color: var(--background-fill);
+    background: var(--background-fill);
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -53,7 +53,7 @@
     width: 8rem;
     height: 8rem;
 }
-.logo {
+.welcomeLogo {
     position: relative;
     width: 8rem;
     z-index: 2;

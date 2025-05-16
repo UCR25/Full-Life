@@ -37,7 +37,7 @@ const Signup = () => {
                 {/* Back Button*/}
                 <h1 className="padding4">Full-Life</h1>
                 <div className="logo-wrapper flex">
-                    <img src={logo} alt="Full-Life Logo" className="logo" />
+                    <img src={logo} alt="Full-Life Logo" className="welcomeLogo" />
                     <FocusBubble className="focus-bubble"/>
                 </div>
                 <div className="title-text centering">

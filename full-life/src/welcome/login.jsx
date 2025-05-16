@@ -25,7 +25,7 @@ const Login = () => {
             <span>BACK</span>
           </div>
           <h1>Full-Life</h1>
-          <img className='logo' src={idkLogo} alt='Project Logo' />
+          <img className='loginLogo' src={idkLogo} alt='Project Logo' />
           <p1>Live life to the fullest</p1>
         </div>
         
