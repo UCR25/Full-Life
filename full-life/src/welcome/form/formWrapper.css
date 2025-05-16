@@ -1,0 +1,19 @@
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    flex: 1;
+}
+h2 {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 2rem;
+}
+.children {
+    display: grid;
+    gap: 1rem .5rem;
+    justify-content: flex-start;
+    grid-template-columns: auto minmax(auto, 400px);
+}

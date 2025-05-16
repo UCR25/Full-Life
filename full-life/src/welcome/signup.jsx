@@ -1,8 +1,11 @@
 import React, { useState , useNavigate} from 'react';
 import { GoogleLogin, googleLogout} from '@react-oauth/google';
 import './signup.css';
+import '../global.css';
 import logo  from '../assets/logov3.png';
 import FocusBubble from './focusBubble';
+import Stars from './Stars';
+import Form from './form/form';
 
 const Signup = () => {
     const [displayName, setDisplayName] = useState("");
@@ -27,26 +30,26 @@ const Signup = () => {
         }
       };
   return (
-    <section className="body">
-        <section className="title-panel flex padding4">
-            {/* Back Button*/}
-            <div className="logo-wrapper flex">
-                <img src={logo} alt="Full-Life Logo" className="logo" />
-                <FocusBubble className="focus-bubble"/>
-            </div>
-            <h1 className="text-xl font-bold">Welcome👋</h1>
-            <h2 className="text-lg accent">Ready to lead a Full-Life?</h2>
+    <>
+        <Stars/>
+        <section className="body">
+            <section className="title-panel flex padding4">
+                {/* Back Button*/}
+                <h1 className="padding4">Full-Life</h1>
+                <div className="logo-wrapper flex">
+                    <img src={logo} alt="Full-Life Logo" className="logo" />
+                    <FocusBubble className="focus-bubble"/>
+                </div>
+                <div className="title-text centering">
+                    <h1 className="text-xl font-bold">Welcome👋</h1>
+                    <h2 className="text-lg font-regular">Live life to the fullest.</h2>
+                </div>
+            </section>
+            <section className="form-panel">
+                <Form/>
+            </section>
         </section>
-        <section className="form-panel">
-            <div className="form-wrapper">
-                <h2 className="text-md font-regular form-prompt"></h2>
-                <form onSubmit={handleSubmit}>
-                    <input></input>
-                    {/* Next button */}
-                </form>
-            </div>
-        </section>
-    </section>
+    </>
     )
 }
 
