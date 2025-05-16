@@ -1,80 +1,56 @@
-from bson import ObjectId
-from typing import List, Optional
-from motor.motor_asyncio import AsyncIOMotorCollection
+# profile_manager.py
 
+from typing import Dict, Optional, List
+from profile_repository import ProfileRepository
 from mongo_client import profiles_collection
 
-def serialize_profile(doc: dict) -> dict:
-    """
-    Convert a MongoDB profile document into a JSON-serializable dict,
-    matching ProfileOut (user_id, username, email, hobbies).
-    """
-    return {
-        "user_id": doc.get("user_id"),
-        "username": doc.get("username"),
-        "email":    doc.get("email"),
-        "hobbies":  doc.get("hobbies", []),
-    }
+# single repo instance
+_repo = ProfileRepository(profiles_collection)
 
-async def create_profile(
-    data: dict,
-    collection: AsyncIOMotorCollection = profiles_collection
-) -> dict:
+async def create_profile(data: dict) -> dict:
     """
-    Insert a new profile document and return the created profile.
+    Business-logic hook for creating a profile.
     """
-    result = await collection.insert_one(data)
-    doc = await collection.find_one({ "_id": result.inserted_id })
-    return serialize_profile(doc)
+    return await _repo.create(data)
 
-async def get_profile(
-    profile_id: str,
-    collection: AsyncIOMotorCollection = profiles_collection
-) -> Optional[dict]:
+async def get_profile_by_id(profile_id: str) -> Optional[dict]:
     """
-    Retrieve a single profile by its MongoDB ObjectId string.
-    Returns None if not found.
+    Fetch a profile by its MongoDB _id.
     """
-    doc = await collection.find_one({ "_id": ObjectId(profile_id) })
-    return serialize_profile(doc) if doc else None
+    return await _repo.get_by_id(profile_id)
 
-async def update_profile(
-    profile_id: str,
-    update_data: dict,
-    collection: AsyncIOMotorCollection = profiles_collection
-) -> Optional[dict]:
+async def get_profile_by_user_id(user_id: str) -> Optional[dict]:
     """
-    Update fields of a profile and return the updated document.
-    Returns None if the profile does not exist.
+    Fetch a profile by the auth-service user_id.
     """
-    result = await collection.update_one(
-        { "_id": ObjectId(profile_id) },
-        { "$set": update_data }
-    )
-    if result.matched_count:
-        doc = await collection.find_one({ "_id": ObjectId(profile_id) })
-        return serialize_profile(doc)
-    return None
+    return await _repo.get_by_user_id(user_id)
 
-async def delete_profile(
-    profile_id: str,
-    collection: AsyncIOMotorCollection = profiles_collection
-) -> bool:
+async def update_profile_by_id(profile_id: str, update_data: dict) -> Optional[dict]:
     """
-    Delete a profile by its ID.
-    Returns True if a document was deleted.
+    Update a profile’s fields by its MongoDB _id.
     """
-    result = await collection.delete_one({ "_id": ObjectId(profile_id) })
-    return result.deleted_count == 1
+    return await _repo.update_by_id(profile_id, update_data)
 
-async def list_profiles(
-    collection: AsyncIOMotorCollection = profiles_collection
-) -> List[dict]:
+async def update_profile_by_user_id(user_id: str, update_data: dict) -> Optional[dict]:
     """
-    Retrieve all profiles.
+    Update a profile’s fields by auth-service user_id.
     """
-    profiles: List[dict] = []
-    cursor = collection.find({})
-    async for doc in cursor:
-        profiles.append(serialize_profile(doc))
-    return profiles
+    return await _repo.update_by_user_id(user_id, update_data)
+
+async def delete_profile_by_id(profile_id: str) -> bool:
+    """
+    Delete a profile by its MongoDB _id.
+    """
+    return await _repo.delete_by_id(profile_id)
+
+async def delete_profile_by_user_id(user_id: str) -> bool:
+    """
+    Delete a profile by auth-service user_id.
+    """
+    return await _repo.delete_by_user_id(user_id)
+
+async def list_profiles() -> List[dict]:
+    """
+    List all profiles.
+    """
+    return await _repo.list_all()
