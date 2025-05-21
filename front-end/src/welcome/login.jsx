@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import idkLogo from '../assets/calendar1.png';
 import Stars from './Stars';
+import { saveUserProfile, clearUserProfile } from '../utils/storage';
 
 const Login = () => {
   const navigate = useNavigate()
 
   function handleLogin() {
-    googleLogout()
+    googleLogout();
+    clearUserProfile();
   }
 
   return (
@@ -38,10 +40,12 @@ const Login = () => {
             <GoogleLogin 
               onSuccess={(credentialResponse) => {
                 console.log(credentialResponse.credential);
-                console.log(jwtDecode(credentialResponse.credential));
-
+                const userProfile = jwtDecode(credentialResponse.credential);
+                console.log(userProfile);
+                
+                saveUserProfile(userProfile);
+                localStorage.setItem('user', JSON.stringify(userProfile));
                 navigate('/user-home');
-                localStorage.setItem('user', JSON.stringify(jwtDecode(credentialResponse.credential)));
               }}
               onError={() => { console.log('Login Failed'); }}
               auto_select={true} // allows users to stay logged in
