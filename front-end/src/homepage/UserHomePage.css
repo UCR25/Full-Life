@@ -1,0 +1,15 @@
+.user-home-container {
+  min-height: 100vh;
+  color: white;
+}
+
+.main-content {
+  display: flex;
+  padding-top: 80px; /* Space for navbar */
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+}
