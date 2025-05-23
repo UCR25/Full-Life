@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./home_navbar.css";
 
-const HomeNavbar = () => {
+const HomeNavbar = ({ toggleProfile }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -38,11 +38,11 @@ const HomeNavbar = () => {
                   </span>
                 </div>
                 <div className="dropdown-divider"></div>
-                <Link to="/profile" className="dropdown-item">
+                <div className="dropdown-item" onClick={toggleProfile}>
                   <span className="dropdown-icon"><i className="fas fa-user-edit"></i></span>
                   <span>View Profile</span>
                   <span className="dropdown-arrow">›</span>
-                </Link>
+                </div>
                 <Link to="/settings" className="dropdown-item">
                   <span className="dropdown-icon"><i className="fas fa-cog"></i></span>
                   <span>Settings & Privacy</span>
@@ -67,4 +67,4 @@ const HomeNavbar = () => {
   );
 };
 
-export default HomeNavbar;
+export default HomeNavbar
