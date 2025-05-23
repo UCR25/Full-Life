@@ -22,7 +22,7 @@ const Login = () => {
       <Stars />
       <div className="login-card">
         <div className="login-left">
-          <div className="back-button" onClick={() => navigate(-1)}>
+          <div className="back-button" onClick={() => navigate('/')}>
             <MdArrowBackIosNew size={18} />
             <span>BACK</span>
           </div>
