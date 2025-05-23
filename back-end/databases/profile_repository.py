@@ -19,6 +19,7 @@ class ProfileRepository:
             "username":  doc.get("username"),
             "email":     doc.get("email"),
             "hobbies":   doc.get("hobbies", []),
+            "picture":   doc.get("picture"),
         }
 
     async def create(self, data: dict) -> dict:
