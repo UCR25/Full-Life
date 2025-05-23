@@ -1,10 +1,11 @@
 import React from 'react';
 import './calendar.css';
+import CalendarHeader from './calenderHeader.jsx';
 
 const Calendar = () => {
     return (
         <div className="middle-panel">
-            <h2>Calendar</h2>
+            <CalendarHeader/>
         </div>
     );
 }
