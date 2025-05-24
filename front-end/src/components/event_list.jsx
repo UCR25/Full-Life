@@ -138,16 +138,16 @@ const EventList = () => {
         <div className="right-panel">
             <h2 className="event-list-title">Nearby Events/Places</h2>
             
-            {/* Search bar */}
-            <div className="event-search-container">
-                <FaSearch className="search-icon" />
-                <input 
-                    type="text" 
-                    className="event-search-input" 
-                    placeholder="Search events..." 
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
+            {/* Prompt bar */}
+            <div className="prompt-container">
+                <textarea 
+                    className="prompt-input" 
+                    placeholder="Ask me anything..." 
+                    rows="3"
+                ></textarea>
+                <button className="prompt-submit-btn">
+                    <FaSearch />
+                </button>
             </div>
             
             {/* Filter tags */}
@@ -169,7 +169,19 @@ const EventList = () => {
             <div className="events-list">
                 {filteredEvents.length > 0 ? (
                     filteredEvents.map(event => (
-                        <div key={event.id} className="event-card">
+                        <div 
+                            key={event.id} 
+                            className="event-card"
+                            draggable="true"
+                            onDragStart={(e) => {
+                                // Set the data to be transferred
+                                e.dataTransfer.setData('application/json', JSON.stringify(event));
+                                e.currentTarget.classList.add('dragging');
+                            }}
+                            onDragEnd={(e) => {
+                                e.currentTarget.classList.remove('dragging');
+                            }}
+                        >
                             <div className="event-header">
                                 <h3 className="event-title">{event.title}</h3>
                                 <span className="event-distance">
