@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { BehaviorSubject } from "rxjs";
 import "./calendarHeader.css";
 
-const onDateChange$ = new BehaviorSubject(new Date());
+export const onDateChange$ = new BehaviorSubject(new Date());
 
 function getMonth(date)
 {
@@ -83,9 +82,8 @@ export default function CalendarHeader() {
       <header className="main" onClick={handleClick}>
         <a className="logo">📅</a>
         <button>Today</button>
-
-        <h2>{label}</h2>
         
+        <h2>{label}</h2>
         <nav>
           <button data-dir="prev">←</button>
           <button data-dir="next">→</button>
