@@ -8,13 +8,13 @@
 
 /* Variables */
 :root {
-    --color100: hsl(200, 43, 91);
-    --color300: hsl(200, 69, 67);
-    --color500: hsl(200, 78, 50);
-    --color700: hsl(200, 100, 35);
-    --color900: hsl(200, 100, 13);
-    --accent: hsla(275 100 88 / 1);
-    --text: hsl(0, 0, 100);
+    --color100: hsla(200, 43%, 91%, 1);
+    --color300: hsla(200, 69%, 67%, 1);
+    --color500: hsla(200, 78%, 50%, 1);
+    --color700: hsla(200, 100%, 35%, 1);
+    --color900: hsla(200, 100%, 13%, 1);
+    --accent: hsla(275, 100%, 88%, 1);
+    --text: hsl(0, 0%, 100%, 1);
 
     --background-fill: linear-gradient(135deg, #0a1f58 0%, #000000 100%);
     --body-fill: hsla(360 0 100 / 0.05);
