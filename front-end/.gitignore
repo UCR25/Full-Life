@@ -1,3 +1,9 @@
+# Ignore raw Mongo data
+mongo-data/
+
+# But keep seed files
+!databases/profiles_seed.json
+
 # Logs
 logs
 *.log
@@ -22,3 +28,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+

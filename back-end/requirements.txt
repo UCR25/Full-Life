@@ -3,3 +3,4 @@ uvicorn[standard]
 python-dotenv
 motor            
 pydantic           
+email-validator>=1.1

@@ -2,10 +2,10 @@ services:
   mongo:
     image: mongo:6.0
     container_name: mongo
-    volumes:
-      - mongo-data:/data/db
     ports:
       - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
 
   backend:
     build:
@@ -17,6 +17,21 @@ services:
       - mongo
     ports:
       - "8000:8000"
+    command: >
+      sh -c "
+        # wait for Mongo to be ready
+        until nc -z mongo 27017; do
+          echo 'Waiting for Mongo…' && sleep 1;
+        done
+
+        # seed your profiles
+        echo 'Seeding profiles…'
+        python profile_seed.py
+
+        # start FastAPI
+        echo 'Starting FastAPI…'
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
 
   frontend:
     build:
@@ -25,6 +40,3 @@ services:
       - backend
     ports:
       - "80:80"
-
-volumes:
-  mongo-data:
