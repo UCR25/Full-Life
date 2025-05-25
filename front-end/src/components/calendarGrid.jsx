@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react';
+import {dragDropContext, Droppable, Draggable, DragDropContext } from "react-beautiful-dnd";
 import './calendarGrid.css'; // You can style .calendar-grid and .day-box here
 import { onDateChange$ } from './calenderHeader.jsx';
 
@@ -23,7 +24,6 @@ const CalendarGrid = () => {
 
   const boxes = [];
 
-  // Add weekday headers
   weekdayNames.forEach((day, index) => {
     boxes.push(
       <div className="day-header" key={`header-${index}`}>
@@ -46,7 +46,7 @@ const CalendarGrid = () => {
     );
   }
 
-  return <div className="calendar-grid">{boxes}</div>;
+  return <DragDropContext onDragEnd={this.onDragend}><div className="calendar-grid">{boxes}</div></DragDropContext>;
 };
 
 export default CalendarGrid;
