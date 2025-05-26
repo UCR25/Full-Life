@@ -46,7 +46,24 @@ const CalendarGrid = () => {
     );
   }
 
-  return <DragDropContext onDragEnd={this.onDragend}><div className="calendar-grid">{boxes}</div></DragDropContext>;
+  // Simple implementation without drag and drop for now to get the calendar working
+  // We'll remove the DragDropContext temporarily to fix the black screen
+  return (
+    <div className="calendar-grid">{boxes}</div>
+  );
+  
+  /* We can re-enable this once the basic calendar is working
+  const onDragEnd = (result) => {
+    // Handle drag end logic here
+    console.log('Drag ended:', result);
+  };
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="calendar-grid">{boxes}</div>
+    </DragDropContext>
+  );
+  */
 };
 
 export default CalendarGrid;
