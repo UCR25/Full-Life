@@ -8,7 +8,7 @@ import TodoList from "../components/todo_list";
 import Calendar from "../components/calendar";
 import EventList from "../components/event_list";
 
-const TEST_USER_ID = "105013398891910779346";
+const TEST_USER_ID = "50";
 
 export default function UserHomePage() {
   const [showProfile, setShowProfile] = useState(false);

@@ -1,3 +1,6 @@
+# Ignore raw Mongo data
+mongo-data/
+
 # OS
 .DS_Store
 Thumbs.db

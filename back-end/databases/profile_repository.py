@@ -1,13 +1,19 @@
-# profile_repository.py
+# back-end/databases/profile_repository.py
 
+import os
+import json
 from typing import List, Optional
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
+
+# Always load/write profile_seeds.json sitting next to this .py file
+SEEDS_FILE = os.path.join(os.path.dirname(__file__), "profile_seeds.json")
 
 class ProfileRepository:
     """
     CRUD operations on the 'profiles' collection.
     Serializes Mongo documents into the shape of ProfileOut.
+    Also appends new profiles to the local profile_seeds.json on creation.
     """
     def __init__(self, collection: AsyncIOMotorCollection):
         self.collection = collection
@@ -23,9 +29,28 @@ class ProfileRepository:
         }
 
     async def create(self, data: dict) -> dict:
+        # 1) Insert into MongoDB
         result = await self.collection.insert_one(data)
         doc = await self.collection.find_one({"_id": result.inserted_id})
-        return self._serialize(doc)
+        serialized = self._serialize(doc)
+
+        # 2) Append to local seeds file
+        try:
+            with open(SEEDS_FILE, "r", encoding="utf-8") as f:
+                seeds = json.load(f)
+                if not isinstance(seeds, list):
+                    seeds = []
+        except (FileNotFoundError, json.JSONDecodeError):
+            seeds = []
+
+        seeds.append(serialized)
+
+        # Ensure the JSON file exists and write updated seeds
+        os.makedirs(os.path.dirname(SEEDS_FILE), exist_ok=True)
+        with open(SEEDS_FILE, "w", encoding="utf-8") as f:
+            json.dump(seeds, f, indent=2)
+
+        return serialized
 
     async def get_by_id(self, id: str) -> Optional[dict]:
         doc = await self.collection.find_one({"_id": ObjectId(id)})
