@@ -45,6 +45,7 @@
 }
 
 .back-arrow:hover {
+  background: #3b82f6;
   transform: translateX(-5px);
 }
 
