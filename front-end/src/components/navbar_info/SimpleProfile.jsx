@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './SimpleProfile.css';
 
-const SimpleProfile = ({ goBack }) => {
+const SimpleProfile = ({ goBack, profileText }) => {
   const [profile, setProfile] = useState(null);
   
   useEffect(() => {
@@ -13,8 +13,8 @@ const SimpleProfile = ({ goBack }) => {
     }
   }, []);
 
-  // Hardcoded hobbies
-  const hobbies = ['Reading', 'Hiking', 'Sleeping', 'Cooking'];
+  // Get hobbies from the user profile
+  const userHobbies = profile?.hobbies || [];
 
   if (!profile) {
     return (
@@ -51,9 +51,13 @@ const SimpleProfile = ({ goBack }) => {
             <div className="simple-info-item">
               <span className="info-label">Hobbies:</span>
               <div className="simple-hobbies-list">
-                {hobbies.map((hobby, index) => (
-                  <span key={index} className="simple-hobby-tag">{hobby}</span>
-                ))}
+                {userHobbies.length > 0 ? (
+                  userHobbies.map((hobby, index) => (
+                    <span key={index} className="simple-hobby-tag">{hobby}</span>
+                  ))
+                ) : (
+                  <span className="simple-hobby-tag">No hobbies listed</span>
+                )}
               </div>
             </div>
           </div>

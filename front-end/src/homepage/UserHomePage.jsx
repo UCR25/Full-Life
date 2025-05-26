@@ -1,70 +1,65 @@
-// src/pages/UserHomePage.jsx
-
-import React, { useState } from "react";
-import API from "../api.jsx";
+import React, { useState, useEffect } from "react";
 import "./UserHomePage.css";
 import HomeNavbar from "../components/home_navbar";
 import TodoList from "../components/todo_list";
 import Calendar from "../components/calendar";
 import EventList from "../components/event_list";
+import SimpleProfile from "../components/navbar_info/SimpleProfile";
 
-const TEST_USER_ID = "105013398891910779346";
+const UserHomePage = () => {
+    const [showProfile, setShowProfile] = useState(false);
+    const [profileText, setProfileText] = useState("");
+    const [user, setUser] = useState(null);
+    
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
-export default function UserHomePage() {
-  const [showProfile, setShowProfile] = useState(false);
-  const [profileText, setProfileText] = useState("");
+    // Toggle profile visibility
+    const toggleProfile = () => {
+        const next = !showProfile;
+        setShowProfile(next);
 
-  const toggleProfile = () => {
-    const next = !showProfile;
-    setShowProfile(next);
+        if (next) {
+            if (user) {
+                // Use the profile data from localStorage
+                const displayName = user.username || user.name || 'Unknown';
+                const email = user.email || 'No email available';
+                const hobbies = user.hobbies && user.hobbies.length > 0 
+                    ? user.hobbies.join(", ") 
+                    : 'No hobbies listed';
+                
+                setProfileText(
+                    `Name: ${displayName}\n` +
+                    `Email: ${email}\n` +
+                    `Hobbies: ${hobbies}`
+                );
+            } else {
+                setProfileText("No profile data found. Please log in again.");
+            }
+        }
+    };
 
-    if (next) {
-      API.get(`/profiles/by-user/${TEST_USER_ID}`)
-        .then((res) => {
-          const p = res.data;
-          setProfileText(
-            `Name: ${p.username}\n` +
-            `Email: ${p.email}\n` +
-            `Hobbies: ${p.hobbies.join(", ")}`
-          );
-        })
-        .catch(() => setProfileText("Failed to load profile."));
-    }
-  };
-
-  return (
-    <div className="user-home-container">
-      <HomeNavbar toggleProfile={toggleProfile} />
-
-      {showProfile && (
-        <div className="profile-box">
-          <button className="back-btn" onClick={toggleProfile}>
-            ← Back
-          </button>
-          {/* Debug-friendly box to ensure visibility */}
-          <pre
-            style={{
-              background: "yellow",
-              color: "black",
-              padding: "1rem",
-              whiteSpace: "pre-wrap",
-              border: "2px solid red",
-              maxWidth: "400px",
-              margin: "1rem auto",
-            }}
-          >
-            {profileText}
-          </pre>
+    return (
+        <div className="user-home-container">
+            {/* <HomeNavbar toggleProfile={toggleProfile} /> */}
+            {!showProfile && <HomeNavbar toggleProfile={toggleProfile} />}
+            
+            {/* Show profile or main content based on state */}
+            {showProfile ? (
+                <SimpleProfile goBack={() => setShowProfile(false)} profileText={profileText} />
+            ) : (
+                <div className="main-content">
+                    <TodoList />
+                    <Calendar />
+                    <EventList />
+                </div>
+            )}
         </div>
-      )}
-
-      {!showProfile && (
-        <div className="main-content">
-          <TodoList />
-          <Calendar />
-          <EventList />
-        </div>
-      )}
-    </div>
-  );
+    );
 }
+
+export default UserHomePage
