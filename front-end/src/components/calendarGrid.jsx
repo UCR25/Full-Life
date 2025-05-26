@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import {dragDropContext, Droppable, Draggable, DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import './calendarGrid.css'; // You can style .calendar-grid and .day-box here
 import { onDateChange$ } from './calenderHeader.jsx';
 

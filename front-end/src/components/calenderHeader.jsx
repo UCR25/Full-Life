@@ -16,9 +16,9 @@ function getYear(date)
 
 const i18n =
 {
-    "month-1": "January ",
+    "month-1": "January",
     "month-2": "February",
-    "month-3": "March:",
+    "month-3": "March",
     "month-4": "April",
     "month-5": "May",
     "month-6": "June",

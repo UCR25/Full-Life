@@ -33,3 +33,6 @@ front-end/.env
 *.db
 coverage/
 htmlcov/
+
+full-life/mongo-data
+mongo-data
