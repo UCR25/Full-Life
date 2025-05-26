@@ -8,6 +8,7 @@ import { MdArrowBackIosNew } from 'react-icons/md';
 import idkLogo from '../assets/calendar1.png';
 import Stars from './Stars';
 import { saveUserProfile, clearUserProfile } from '../utils/storage';
+import API from '../api.jsx';
 
 const Login = () => {
   const navigate = useNavigate()
@@ -39,13 +40,39 @@ const Login = () => {
           <div className="google-btn-container">
             <GoogleLogin 
               onSuccess={(credentialResponse) => {
-                console.log(credentialResponse.credential);
-                const userProfile = jwtDecode(credentialResponse.credential);
-                console.log(userProfile);
+                const googleProfile = jwtDecode(credentialResponse.credential);
                 
-                saveUserProfile(userProfile);
-                localStorage.setItem('user', JSON.stringify(userProfile));
-                navigate('/user-home');
+                // Get the user ID from Google Auth (sub field)
+                const userId = googleProfile.sub;
+                
+                // Try to fetch the user profile from the backend
+                API.get(`/profiles/by-user/${userId}`)
+                  .then(res => {
+                    // Backend profile found - combine with Google profile data
+                    const combinedProfile = {
+                      ...googleProfile,
+                      username: res.data.username,
+                      hobbies: res.data.hobbies,
+                      user_id: userId
+                    };
+                    
+                    // Save the combined profile to localStorage
+                    saveUserProfile(combinedProfile);
+                    localStorage.setItem('user', JSON.stringify(combinedProfile));
+                    navigate('/user-home');
+                  })
+                  .catch(error => {
+                    // If profile not found, just use Google profile data
+                    const basicProfile = {
+                      ...googleProfile,
+                      username: googleProfile.name,
+                      hobbies: [],
+                      user_id: userId
+                    };
+                    saveUserProfile(basicProfile);
+                    localStorage.setItem('user', JSON.stringify(basicProfile));
+                    navigate('/user-home');
+                  });
               }}
               onError={() => { console.log('Login Failed'); }}
               auto_select={true} // allows users to stay logged in
