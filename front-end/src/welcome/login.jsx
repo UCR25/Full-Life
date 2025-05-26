@@ -1,82 +1,97 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './login.css';
-import { GoogleLogin, googleLogout } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import { MdArrowBackIosNew } from 'react-icons/md';
-import idkLogo from '../assets/calendar1.png';
-import Stars from './Stars';
-import { saveUserProfile, clearUserProfile } from '../utils/storage';
-import API from '../api.jsx';
+// src/pages/Login.jsx
+
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./login.css";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { MdArrowBackIosNew } from "react-icons/md";
+import idkLogo from "../assets/calendar1.png";
+import Stars from "./Stars";
+import API from "../api.jsx";
+import { clearUserProfile } from "../utils/storage";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  function handleLogin() {
+  // Clears session/token and only our 'user' key
+  const resetSession = () => {
     googleLogout();
     clearUserProfile();
-  }
+    localStorage.removeItem("user");
+  };
 
   return (
     <div className="login-container">
       <Stars />
       <div className="login-card">
         <div className="login-left">
-          <div className="back-button" onClick={() => navigate('/')}>
+          <div className="back-button" onClick={() => navigate("/")}>
             <MdArrowBackIosNew size={18} />
             <span>BACK</span>
           </div>
           <h1>Full-Life</h1>
-          <img className='loginLogo' src={idkLogo} alt='Project Logo' />
-          <p1>Live life to the fullest</p1>
+          <img className="loginLogo" src={idkLogo} alt="Project Logo" />
+          <p>Live life to the fullest</p>
         </div>
-        
+
         <div className="login-right">
-          
           <h1>Welcome Back 👋</h1>
           <p>Sign in with your Google account</p>
-          
+
+          {error && <p className="error-text">{error}</p>}
+
           <div className="google-btn-container">
-            <GoogleLogin 
-              onSuccess={(credentialResponse) => {
-                const googleProfile = jwtDecode(credentialResponse.credential);
-                
-                // Get the user ID from Google Auth (sub field)
+            <GoogleLogin
+              onClick={resetSession}
+              onSuccess={async ({ credential }) => {
+                setError("");
+                resetSession();
+
+                // dynamic-import jwt-decode so Vite/Rollup won't choke
+                let jwtDecode;
+                try {
+                  const mod = await import("jwt-decode");
+                  jwtDecode = mod.default ?? mod.jwtDecode ?? mod;
+                } catch {
+                  setError("Could not load token decoder.");
+                  return;
+                }
+
+                let googleProfile;
+                try {
+                  googleProfile = jwtDecode(credential);
+                } catch {
+                  setError("Failed to parse auth token.");
+                  return;
+                }
+
                 const userId = googleProfile.sub;
-                
-                // Try to fetch the user profile from the backend
+
+                // 1) Check in our DB
                 API.get(`/profiles/by-user/${userId}`)
-                  .then(res => {
-                    // Backend profile found - combine with Google profile data
-                    const combinedProfile = {
-                      ...googleProfile,
-                      username: res.data.username,
-                      hobbies: res.data.hobbies,
-                      user_id: userId
-                    };
-                    
-                    // Save the combined profile to localStorage
-                    saveUserProfile(combinedProfile);
-                    localStorage.setItem('user', JSON.stringify(combinedProfile));
-                    navigate('/user-home');
+                  .then((res) => {
+                    // 2a) Found → persist & navigate
+                    const backendProfile = res.data;
+                    localStorage.setItem("user", JSON.stringify(backendProfile));
+                    navigate("/user-home");
                   })
-                  .catch(error => {
-                    // If profile not found, just use Google profile data
-                    const basicProfile = {
-                      ...googleProfile,
-                      username: googleProfile.name,
-                      hobbies: [],
-                      user_id: userId
-                    };
-                    saveUserProfile(basicProfile);
-                    localStorage.setItem('user', JSON.stringify(basicProfile));
-                    navigate('/user-home');
+                  .catch((err) => {
+                    if (err.response?.status === 404) {
+                      setError(
+                        "No account found for this Google user. Please sign up first."
+                      );
+                    } else {
+                      setError("Server error—please try again later.");
+                    }
+                    // clean up any leftover
+                    resetSession();
                   });
               }}
-              onError={() => { console.log('Login Failed'); }}
-              auto_select={true} // allows users to stay logged in
-
+              onError={() => {
+                setError("Google sign-in failed. Please try again.");
+              }}
+              auto_select
               useOneTap
               type="standard"
               theme="filled_black"
@@ -85,14 +100,14 @@ const Login = () => {
               size="large"
             />
           </div>
-          
+
           <p className="register-link">
-            Don't have an account? <Link to="/signup">Register</Link>
+            Don’t have an account? <Link to="/signup">Register</Link>
           </p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
