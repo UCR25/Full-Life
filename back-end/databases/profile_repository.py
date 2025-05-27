@@ -7,7 +7,7 @@ from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
 
 # Always load/write profile_seeds.json sitting next to this .py file
-SEEDS_FILE = os.path.join("/tmp", "profile_seeds.json")
+SEEDS_FILE = os.path.join(os.path.dirname(__file__), "profile_seeds.json")
 
 class ProfileRepository:
     """
