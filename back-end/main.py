@@ -13,11 +13,8 @@ logger = logging.getLogger(__name__)
 
 from managers.profile_manager import (
     create_profile,
-    get_profile_by_id,
     get_profile_by_user_id,
-    update_profile_by_id,
     update_profile_by_user_id,
-    delete_profile_by_id,
     delete_profile_by_user_id,
     list_profiles,
 )
