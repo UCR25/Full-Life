@@ -21,7 +21,7 @@ class ProfileRepository:
     @staticmethod
     def _serialize(doc: dict) -> dict:
         return {
-            "user_id":  str(doc.get("google_auth_id")),
+            "user_id":  str(doc.get("user_id")),
             "username": doc.get("username"),
             "email":    doc.get("email"),
             "hobbies":  doc.get("hobbies", []),
@@ -57,7 +57,7 @@ class ProfileRepository:
         return self._serialize(doc) if doc else None
 
     async def get_by_user_id(self, user_id: str) -> Optional[dict]:
-        doc = await self.collection.find_one({"google_auth_id": user_id})
+        doc = await self.collection.find_one({"user_id": user_id})
         return self._serialize(doc) if doc else None
 
     async def update_by_id(self, id: str, update_data: dict) -> Optional[dict]:
@@ -72,12 +72,12 @@ class ProfileRepository:
 
     async def update_by_user_id(self, user_id: str, update_data: dict) -> Optional[dict]:
         res = await self.collection.update_one(
-            {"google_auth_id": user_id},
+            {"user_id": user_id},
             {"$set": update_data}
         )
         if not res.matched_count:
             return None
-        doc = await self.collection.find_one({"google_auth_id": user_id})
+        doc = await self.collection.find_one({"user_id": user_id})
         return self._serialize(doc)
 
     async def delete_by_id(self, id: str) -> bool:
@@ -85,7 +85,7 @@ class ProfileRepository:
         return res.deleted_count == 1
 
     async def delete_by_user_id(self, user_id: str) -> bool:
-        res = await self.collection.delete_one({"google_auth_id": user_id})
+        res = await self.collection.delete_one({"user_id": user_id})
         return res.deleted_count == 1
 
     async def list_all(self) -> List[dict]:
