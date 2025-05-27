@@ -130,23 +130,10 @@ const CalendarGrid = () => {
     // Get events for this day
     const dayEvents = calendarEvents[dateString] || [];
     
-    // Get tasks for this day - need to check for both formats due to timezone issues
+    // Get tasks for this day - using only the exact date string match to avoid duplication
     const dayTasks = todoTasks.filter(task => {
-      // Check if the task date matches our formatted date string
-      if (task.date === dateString) return true;
-      
-      // If not, try to parse the task date and see if it matches our day
-      try {
-        const taskDate = new Date(task.date);
-        const taskDay = taskDate.getDate();
-        const taskMonth = taskDate.getMonth();
-        const taskYear = taskDate.getFullYear();
-        
-        // Check if this task belongs to this day
-        return taskDay === day && taskMonth === month && taskYear === year;
-      } catch (e) {
-        return false;
-      }
+      // Only use the exact string match to prevent timezone issues
+      return task.date === dateString;
     });
 
     boxes.push(
