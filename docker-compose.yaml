@@ -5,7 +5,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./mongo-data:/data/db
+      - mongo-data:/data/db
 
   backend:
     build:
@@ -19,16 +19,11 @@ services:
       - "8000:8000"
     command: >
       sh -c "
-        # wait for Mongo to be ready
         until nc -z mongo 27017; do
           echo 'Waiting for Mongo…' && sleep 1;
         done
-
-        # seed your profiles
         echo 'Seeding profiles…'
         python databases/profile_seeds.py
-
-        # start FastAPI
         echo 'Starting FastAPI…'
         uvicorn main:app --host 0.0.0.0 --port 8000
       "
@@ -40,3 +35,8 @@ services:
       - backend
     ports:
       - "80:80"
+
+# declare your named volume here
+volumes:
+  mongo-data:
+    # driver: local   # (default)
