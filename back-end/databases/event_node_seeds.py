@@ -43,9 +43,9 @@ async def seed():
         doc["user_ID"] = doc.get("user_ID") or doc.pop("user_id", None) or doc.pop("id", None)
 
             
-        event_id = doc.get("event_ID")
-        if not event_id:
-            print("⚠ skipping entry with no event_ID:", doc)
+        user_ID = doc.get("user_ID")
+        if not user_ID:
+            print("⚠ skipping entry with no owner:", doc)
             continue
 
         doc.pop("_id", None)  # Avoid extra fields
@@ -54,7 +54,7 @@ async def seed():
 
         # Insert the document as is
         await coll.insert_one(doc)
-        print(f"✔ inserted event_ID={event_id}")
+        print(f"✔ inserted event for user={user_ID}")
 
 
     # 6) Final count

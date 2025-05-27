@@ -4,9 +4,8 @@ from datetime import datetime
 
 class EventNode(BaseModel):
     user_ID: str = Field(..., description="Google Auth-service user ID")
-    event_ID: str = Field(..., description="Unique event ID")
+    event_list_ID: str = Field(..., description="Unique event list ID")
     user_date_time: Optional[datetime] = Field(None, description="The day that the user wants to attend the event")
-    index: int = Field(..., description="Index of the event")
     name: str = Field(..., description="Name of the event")
     address: str = Field(..., description="Address where the event will take place")
     description: str = Field(..., description="Description of the event")
