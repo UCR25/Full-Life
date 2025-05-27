@@ -33,9 +33,9 @@ const Signup = () => {
     <div className="page">
         <Stars/>
         <section className="body">
-            <section className="title-panel flex padding4">
+            <section className="title-panel flex">
                 {/* Back Button*/}
-                <h1 className="padding4">Full-Life</h1>
+                <h1 className="padding4 pageTitle">Full-Life</h1>
                 <div className="logo-wrapper flex">
                     <img src={logo} alt="Full-Life Logo" className="welcomeLogo" />
                     <FocusBubble className="focus-bubble"/>
