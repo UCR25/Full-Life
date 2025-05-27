@@ -54,7 +54,7 @@
   text-align: center;
 }
 
-.login-container .back-button {
+.login-container .back-button, .title-panel .back-button {
   position: absolute !important;
   top: 20px !important;
   left: 20px !important;
