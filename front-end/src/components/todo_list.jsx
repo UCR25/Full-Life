@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './todo_list.css';
 import { FaPlus, FaTrash, FaCalendarAlt, FaClock } from 'react-icons/fa';
+import { getUserSpecificKey } from '../utils/userUtils';
 
 const TodoList = () => {
     const [tasks, setTasks] = useState([]);
@@ -10,7 +11,8 @@ const TodoList = () => {
     
     // Load tasks from localStorage on component mount
     useEffect(() => {
-        const savedTasks = localStorage.getItem('todoTasks');
+        const storageKey = getUserSpecificKey('todoTasks');
+        const savedTasks = localStorage.getItem(storageKey);
         if (savedTasks) {
             setTasks(JSON.parse(savedTasks));
         }
@@ -18,7 +20,8 @@ const TodoList = () => {
     
     // Save tasks to localStorage whenever tasks change
     useEffect(() => {
-        localStorage.setItem('todoTasks', JSON.stringify(tasks));
+        const storageKey = getUserSpecificKey('todoTasks');
+        localStorage.setItem(storageKey, JSON.stringify(tasks));
     }, [tasks]);
     
     // Add a new task
