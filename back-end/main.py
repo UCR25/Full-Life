@@ -27,7 +27,7 @@ app = FastAPI()
 # Allow your front-end origin (or * in dev)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://localhost:80"],  
+    allow_origins=["http://localhost", "http://localhost:80", "http://localhost:5173", "http://localhost:8000"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,7 +35,12 @@ app.add_middleware(
 
 @app.post("/profiles", response_model=ProfileOut)
 async def api_create_profile(payload: ProfileCreate):
-    return await create_profile(payload.dict())
+    try:
+        result = await create_profile(payload.dict())
+        return result
+    except Exception as e:
+        logger.error(f"Error in create_profile: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error that is special!")
 
 
 @app.get("/profiles", response_model=List[ProfileOut])
