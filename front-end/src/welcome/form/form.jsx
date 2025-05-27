@@ -1,22 +1,35 @@
-import { useState} from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useFormStepper } from './useFormStepper.jsx';
 import * as FormPage1 from './formPage1.jsx';
 import * as FormPage2 from './formPage2.jsx';
 import * as FormPage3 from './formPage3.jsx';
-import API from "../../api.jsx"
+import API from "../../api.jsx";
 import './form.css';
 
-const INITIAL_DATA = {
-  displayName: "",
-  googleCredential: null,
-  hobbies: []
-};
-
-export default function Form() {
+export default function Form({ googleCredential, displayName }) {
   const [error, setError] = useState("");
-  const [data, setData] = useState(INITIAL_DATA);
+  const [data, setData] = useState({
+    displayName: displayName || "",
+    googleCredential: googleCredential || null,
+    hobbies: []
+  });
+
+  // Sync incoming props to internal state
+  useEffect(() => {
+    setData(prev => ({
+      ...prev,
+      displayName: displayName || "",
+      googleCredential: googleCredential || null
+    }));
+  }, [displayName, googleCredential]);
+
   const navigate = useNavigate();
+
+ function navigateToUserHome() {
+    navigate("/user-home");
+  }
+
 
   function updateFields(fields) {
     setData(prev => ({ ...prev, ...fields }));
@@ -52,9 +65,12 @@ export default function Form() {
   async function onSubmit(e) {
     e.preventDefault();
     if (!canContinue) return;
-    if (!isLastStep) return next();
 
-    // Final step logic
+    if (!isLastStep) {
+      next();
+      return;
+    }
+
     const credential = data.googleCredential?.credential;
     if (!credential) {
       alert("Missing Google credentials.");
@@ -78,24 +94,22 @@ export default function Form() {
       return;
     }
 
-    // 1a-1b
-    const userId = googleProfile.sub;
-    console.log("User:", userId);
+    const userId = googleProfile.sub || googleProfile.id;
 
-    // 2
     const payload = {
       user_id: userId,
-      username: googleProfile.name,
+      username: data.displayName,
       email: googleProfile.email,
       hobbies: data.hobbies,
       picture: googleProfile.picture,
     };
-    // 3-4
+
     try {
-      await API.post("/profiles", payload);
+      const response = await API.post("/profiles", payload);
       localStorage.setItem("user", JSON.stringify(payload));
-      navigate("/user-home");
+      navigateToUserHome();
     } catch (err) {
+      console.error("Error details:", err);
       setError("Failed to create account. Try again later.");
     }
   }
@@ -105,7 +119,11 @@ export default function Form() {
   return (
     <form onSubmit={onSubmit}>
       <StepComponent {...data} updateFields={updateFields} />
-      {error && <p className="error-message" style={{color:"rgba(255, 0, 0, 1)", margin: "1rem auto", textAlign: "center"}}>{error}</p>}
+      {error && (
+        <p className="error-message" style={{ color: "rgba(255, 0, 0, 1)", margin: "1rem auto", textAlign: "center" }}>
+          {error}
+        </p>
+      )}
       <div className="form-nav">
         {!isFirstStep && (
           <button type="button" onClick={back}>

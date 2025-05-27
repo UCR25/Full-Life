@@ -37,6 +37,7 @@ export default function FormPage1({ googleCredential, updateFields }) {
             ) : (
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {
+                  setError("");
                   updateFields({ googleCredential: credentialResponse });
 
                   let jwtDecode;

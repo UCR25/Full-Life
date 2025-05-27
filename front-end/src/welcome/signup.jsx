@@ -55,7 +55,10 @@ const Signup = () => {
                 </div>
             </section>
             <section className="form-panel">
-                <Form/>
+                <Form 
+                    googleCredential={googleCredential} 
+                    displayName={displayName}
+                />
             </section>
         </section>
     </div>
