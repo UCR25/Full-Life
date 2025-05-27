@@ -7,10 +7,6 @@ User ID Curl:
 curl -X GET "http://localhost:8000/profiles/by-user/105013398891910779346"
 
 
-
-
-
-
 Event Node Curls
 
 User Curl: 

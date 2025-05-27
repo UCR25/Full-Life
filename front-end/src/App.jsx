@@ -31,12 +31,12 @@ export default function App() {
     <Router>
       <RedirectHandler>
         <Routes>
-          {/* <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} /> */}
-          <Route path="/" element={<UserHomePage />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/user-home" element={<UserHomePage />} />
           {/* Add a catch-all route that redirects to the landing page */}
-          {/* <Route path="*" element={<Landing />} /> */}
+          <Route path="*" element={<Landing />} />
         </Routes>
       </RedirectHandler>
     </Router>

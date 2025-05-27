@@ -31,30 +31,17 @@
     "username": "mattyb",
     "email": "matthew.brawders@gmail.com",
     "hobbies": [
+      "Running",
       "Games",
       "Cooking",
+      "Sports",
+      "Nature",
       "Food",
-      "Travel",
+      "Arts & Crafts",
       "Film",
       "Music",
-      "Arts & Crafts",
-      "Nature",
-      "Sports",
-      "Running"
+      "Travel"
     ],
     "picture": "https://lh3.googleusercontent.com/a/ACg8ocLpiOWWytY-en3phitpaPeIsp7-ESZ-ftGrdXnWeTriVd4y-w=s96-c"
-  },
-  {
-    "user_id": "112123854122200279104",
-    "username": "boomer",
-    "email": "phd.boomer@gmail.com",
-    "hobbies": [
-      "Running",
-      "Sports",
-      "Cooking",
-      "Games",
-      "Food"
-    ],
-    "picture": "https://lh3.googleusercontent.com/a/ACg8ocKj-A8_ASdLGCQ0B8Lrn3KY7Pm8unpFNss-Wuv6Mec6ILhEEvc=s96-c"
   }
 ]
