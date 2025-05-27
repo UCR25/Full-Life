@@ -60,8 +60,16 @@ const TodoList = () => {
     
     // Format date for display
     const formatDate = (dateString) => {
+        if (!dateString) return '';
+        
+        // Parse the date parts to avoid timezone issues
+        const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+        
+        // Create date with local timezone (months are 0-indexed in JS Date)
+        const date = new Date(year, month - 1, day);
+        
         const options = { weekday: 'short', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        return date.toLocaleDateString(undefined, options);
     };
     
     // Format time to 12-hour format with AM/PM
