@@ -4,8 +4,9 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
+    # ▶️ use a named volume for Mongo’s data
     volumes:
-      - ./mongo-data:/data/db
+      - mongo-data:/data/db
 
   backend:
     build:
@@ -27,6 +28,10 @@ services:
         # seed your profiles
         echo 'Seeding profiles…'
         python databases/profile_seeds.py
+
+        # seed your event_nodes
+        echo 'Seeding event_nodes…'
+        python databases/event_node_seeds.py
 
         # start FastAPI
         echo 'Starting FastAPI…'

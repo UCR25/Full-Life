@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 
 from models.profile import ProfileCreate, ProfileOut
+from models.event_node import EventNodeCreate, EventNodeOut
 
 from managers.profile_manager import (
     create_profile,
@@ -15,6 +16,21 @@ from managers.profile_manager import (
     delete_profile_by_user_id,
     list_profiles,
 )
+
+from managers.event_node_manager import (
+    create_event,
+    get_event_by_id,
+    get_event_by_user_id,
+    get_event_by_event_id,
+    get_event_by_user_and_event_id,
+    get_event_by_name,
+    get_event_by_categories,
+    update_event_by_id,
+    update_event_by_user_id,
+    delete_event_by_event_id,
+    delete_event_by_user_id,
+)
+
 
 app = FastAPI()
 
@@ -81,3 +97,83 @@ async def api_delete_profile_by_user(user_id: str):
     success = await delete_profile_by_user_id(user_id)
     if not success:
         raise HTTPException(status_code=404, detail="Profile not found")
+
+
+#event stuff
+
+@app.post("/events", response_model=EventNodeOut)
+async def api_create_event(payload: EventNodeCreate):
+    return await create_event(payload.dict())
+
+@app.get("/events", response_model=List[EventNodeOut])
+async def api_list_events():
+    return await list_events()
+
+@app.get("/events/{event_id}", response_model=EventNodeOut)
+async def api_get_event(event_id: str):
+    event = await get_event_by_id(event_id)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return event
+
+@app.get("/events/by-user/{user_id}", response_model=List[EventNodeOut])
+async def api_get_event_by_user(user_id: str):
+    events = await get_event_by_user_id(user_id)
+    if not events:
+        raise HTTPException(status_code=404, detail="Events not found")
+    return events
+
+@app.get("/events/by-event/{event_id}", response_model=EventNodeOut)
+async def api_get_event_by_event_id(event_id: str):
+    event = await get_event_by_event_id(event_id)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return event
+
+@app.get("event/by-user-and-event/{user_id}/{event_id}", response_model=EventNodeOut)
+async def api_get_event_by_user_and_event_id(user_id: str, event_id: str):
+    event = await get_event_by_user_and_event_id(user_id, event_id)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return event
+
+@app.get("/events/by-name/{name}", response_model=List[EventNodeOut])
+async def api_get_event_by_name(name: str):
+    events = await get_event_by_name(name)
+    if not events:
+        raise HTTPException(status_code=404, detail="Events not found")
+    return events
+
+@app.get("/events/by-categories", response_model=List[EventNodeOut])
+async def api_get_event_by_categories(categories: List[str]):
+    events = await get_event_by_categories(categories)
+    if not events:
+        raise HTTPException(status_code=404, detail = "Events Not Found")
+    return events
+
+@app.put("/events/{event_id}", response_model=EventNodeOut)
+async def api_update_event(event_id: str, payLoad: EventNodeCreate):
+    updated = await update_event_by_id(event_id, payLoad.dict())
+    if not updated:
+        raise HTTPException(status_code = 404, detail = "Event not found")
+    return updated
+
+@app.put("/events/by-user/{user_id}", response_model=EventNodeOut)
+async def api_update_event_by_user(user_id: str, payload: EventNodeCreate):
+    updated = await update_event_by_user_id(user_id, payload.dict())
+    if not updated:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return updated
+
+@app.delete("/events/{event_id}", status_code=204)
+async def api_delete_event(event_id: str):
+    success = await delete_event_by_event_id(event_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+@app.delete("/events/by-user/{user_id}", status_code = 204)
+async def api_data_delete_event_by_user(user_id: str):
+    success = await delete_event_by_user_id(user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
