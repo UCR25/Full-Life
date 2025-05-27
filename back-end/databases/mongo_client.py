@@ -17,7 +17,6 @@ except Exception:
 
 # Collections
 profiles_collection     = db["profiles"]
-event_lists_collection  = db["event_lists"]
 event_nodes_collection  = db["event_nodes"]
 
 def get_db():

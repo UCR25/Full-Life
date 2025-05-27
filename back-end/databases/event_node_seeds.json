@@ -1,0 +1,26 @@
+[
+    {
+        "user_ID": "105013398891910779346",
+        "event_ID": "000001",
+        "user_date_time": "2025-05-25T14:30:00Z",
+        "index": 0,
+        "name": "Marathon Run",
+        "address": "123 man street",
+        "description": "you just be running",
+        "startTime": "2025-05-25T14:30:00Z",
+        "endTime": "2025-05-25T16:00:00Z",
+        "categories": ["hiking", "photography"]
+    },
+    {
+        "user_ID": "123456789",
+        "event_ID": "000002",
+        "user_date_time": "2025-05-6T14:30:00Z",
+        "index": 1,
+        "name": "Scotty's backyard cookout",
+        "address": "bear bear go away street",
+        "description": "cooking and eating",
+        "startTime": "2025-05-6T14:30:00Z",
+        "endTime": "2025-05-8T16:00:00Z",
+        "categories": ["cooking", "nearby"]
+    }
+]

@@ -1,21 +1,33 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
-from category import Category
-from typing   import list
 from datetime import datetime
 
 class EventNode(BaseModel):
-    user_ID: str # List of user IDs associated with the event
-    event_list_num: int
-    event_ID: str
-    index: int
-    name: str
-    address: str
-    description: str
-    startTime: datetime
-    endTime: datetime
-    categories: List[str] = Field(default_factory=list)
-    
+    user_ID: str = Field(..., description="Google Auth-service user ID")
+    event_ID: str = Field(..., description="Unique event ID")
+    user_date_time: Optional[datetime] = Field(None, description="The day that the user wants to attend the event")
+    index: int = Field(..., description="Index of the event")
+    name: str = Field(..., description="Name of the event")
+    address: str = Field(..., description="Address where the event will take place")
+    description: str = Field(..., description="Description of the event")
+    startTime: datetime = Field(..., description="Start time of the event")
+    endTime: datetime = Field(..., description="End time of the event")
+    categories: List[str] = Field(default_factory=list, description="Categories associated with the event")
+
+
+class EventNodeCreate(EventNode):
+    """
+    Payload for creating an event node.
+    """
+
+class EventNodeOut(EventNode):
+    """
+    Payload for updating an event node.
+    """
+    class Config:
+        orm_mode = True
+
+
 class EventNodeBuilder:
     def __init__(self):
         self._event_data = {}
@@ -51,3 +63,4 @@ class EventNodeBuilder:
         
 #event node manager makes nodes from the event node database
 #back builder 
+
