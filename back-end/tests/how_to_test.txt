@@ -1,0 +1,8 @@
+1. Be in back-end folder
+2. Do one of the commands below:
+
+detailed report
+python -m pytest -v -s tests/
+
+pass or not
+python -m pytest tests/

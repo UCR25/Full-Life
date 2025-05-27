@@ -86,4 +86,3 @@ async def test_create_profile_writes_db_and_seeds(fake_collection, tmp_seeds_fil
 
     # Example curl command for a running FastAPI service:
     print(f"curl http://localhost:8000/profiles/by-user/{created['user_id']}")
-
