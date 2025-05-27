@@ -7,7 +7,7 @@ from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
 
 # Always load/write profile_seeds.json sitting next to this .py file
-SEEDS_FILE = os.path.join(os.path.dirname(__file__), "profile_seeds.json")
+SEEDS_FILE = os.path.join("/tmp", "profile_seeds.json")
 
 class ProfileRepository:
     """
@@ -21,7 +21,7 @@ class ProfileRepository:
     @staticmethod
     def _serialize(doc: dict) -> dict:
         return {
-            "user_id":  str(doc.get("google_auth_id")),
+            "user_id":  str(doc.get("user_id")),
             "username": doc.get("username"),
             "email":    doc.get("email"),
             "hobbies":  doc.get("hobbies", []),
