@@ -17,16 +17,75 @@
   padding: 8px 0;
   background-color: transparent;
   border: 1px solid #ccc;
+  color: #4A90E2;
 }
 
 .day-box {
-  text-align: center;
-  padding: 12px 0;
+  position: relative;
+  min-height: 80px;
+  padding: 5px;
   border: 1px solid #ccc;
   user-select: none;
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.day-box:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
 }
 
 .day-box.empty {
   background-color: transparent;
   border: none;
+}
+
+.day-number {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.day-events {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  max-height: calc(100% - 25px);
+}
+
+.calendar-event {
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: white;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.calendar-event:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+.event-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+  font-size: 9px;
+}
+
+.event-time {
+  font-size: 9px;
+  opacity: 0.8;
 }

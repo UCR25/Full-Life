@@ -12,16 +12,13 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Landing />} />
+        {/* <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-
-        {/* Protected / after-login */}
-        <Route path="/user-home" element={<UserHomePage />} />
+        <Route path="/signup" element={<Signup />} /> */}
+        <Route path="/" element={<UserHomePage />} />
 
         {/* Fallback if you like */}
-        <Route path="*" element={<p>404: Not Found</p>} />
+        {/* <Route path="*" element={<p>404: Not Found</p>} /> */}
       </Routes>
     </Router>
   );
