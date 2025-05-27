@@ -39,7 +39,6 @@ const Signup = () => {
         <section className="body">
             <section className="title-panel flex">
                 <div className="back-button" onClick={() => {
-                    console.log("Bakc button clicked!");
                     navigate("/");
                     }}>
                     <MdArrowBackIosNew size={18} />
