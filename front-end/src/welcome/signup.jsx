@@ -38,9 +38,7 @@ const Signup = () => {
         <Stars/>
         <section className="body">
             <section className="title-panel flex">
-                <div className="back-button" onClick={() => {
-                    navigate("/");
-                    }}>
+                <div className="back-button" onClick={() => navigate("/")}>
                     <MdArrowBackIosNew size={18} />
                     <span>BACK</span>
                 </div>

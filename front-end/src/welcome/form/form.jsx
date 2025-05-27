@@ -105,9 +105,15 @@ export default function Form({ googleCredential, displayName }) {
     };
 
     try {
-      const response = await API.post("/profiles", payload);
+      await API.post("/profiles", payload);
+      // Save user data to localStorage
       localStorage.setItem("user", JSON.stringify(payload));
-      navigateToUserHome();
+      
+      // Store a flag in localStorage to indicate we need to redirect after reload
+      localStorage.setItem("redirectToUserHome", "true");
+      
+      // Navigate to the root page first, which should properly handle the redirect
+      window.location.href = "/";
     } catch (err) {
       console.error("Error details:", err);
       setError("Failed to create account. Try again later.");
