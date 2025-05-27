@@ -43,14 +43,6 @@ async def api_list_profiles():
     return await list_profiles()
 
 
-@app.get("/profiles/{profile_id}", response_model=ProfileOut)
-async def api_get_profile(profile_id: str):
-    profile = await get_profile_by_id(profile_id)
-    if not profile:
-        raise HTTPException(status_code=404, detail="Profile not found")
-    return profile
-
-
 @app.get("/profiles/by-user/{user_id}", response_model=ProfileOut)
 async def api_get_profile_by_user(user_id: str):
     profile = await get_profile_by_user_id(user_id)
@@ -63,27 +55,12 @@ async def api_get_profile_by_user(user_id: str):
     return profile
 
 
-@app.put("/profiles/{profile_id}", response_model=ProfileOut)
-async def api_update_profile(profile_id: str, payload: ProfileCreate):
-    updated = await update_profile_by_id(profile_id, payload.dict())
-    if not updated:
-        raise HTTPException(status_code=404, detail="Profile not found")
-    return updated
-
-
 @app.put("/profiles/by-user/{user_id}", response_model=ProfileOut)
 async def api_update_profile_by_user(user_id: str, payload: ProfileCreate):
     updated = await update_profile_by_user_id(user_id, payload.dict())
     if not updated:
         raise HTTPException(status_code=404, detail="Profile not found")
     return updated
-
-
-@app.delete("/profiles/{profile_id}", status_code=204)
-async def api_delete_profile(profile_id: str):
-    success = await delete_profile_by_id(profile_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Profile not found")
 
 
 @app.delete("/profiles/by-user/{user_id}", status_code=204)
