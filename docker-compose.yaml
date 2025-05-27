@@ -4,7 +4,7 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
-    # ▶️ use a named volume, not "./mongo-data"
+    # ▶️ use a named volume for Mongo’s data
     volumes:
       - mongo-data:/data/db
 
@@ -18,6 +18,10 @@ services:
       - mongo
     ports:
       - "8000:8000"
+    # 🔑 bind-mount your databases folder so writes inside the container
+    #    go straight to your host’s back-end/databases directory
+    volumes:
+      - ./back-end/databases:/app/databases
     command: >
       sh -c "
         until nc -z mongo 27017; do

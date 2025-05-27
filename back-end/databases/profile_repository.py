@@ -21,7 +21,7 @@ class ProfileRepository:
     @staticmethod
     def _serialize(doc: dict) -> dict:
         return {
-            "user_id":  str(doc.get("user_id")),
+            "user_id":  str(doc.get("google_auth_id")),
             "username": doc.get("username"),
             "email":    doc.get("email"),
             "hobbies":  doc.get("hobbies", []),
