@@ -27,8 +27,15 @@ services:
         until nc -z mongo 27017; do
           echo 'Waiting for Mongo…' && sleep 1;
         done
+
         echo 'Seeding profiles…'
         python databases/profile_seeds.py
+
+        # seed your event_nodes
+        echo 'Seeding event_nodes…'
+        python databases/event_node_seeds.py
+
+        # start FastAPI
         echo 'Starting FastAPI…'
         uvicorn main:app --host 0.0.0.0 --port 8000
       "

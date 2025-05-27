@@ -5,7 +5,7 @@ Thumbs.db
 .idea/
 
 # Python
-__pycache__/
+__pycache__/    
 *.py[cod]
 *$py.class
 .env
@@ -23,7 +23,7 @@ docker-compose.override.yml
 *.log
 
 # Node
-front-end/node_modules/
+node_modules/
 front-end/dist/
 front-end/build/
 front-end/.env  
@@ -33,6 +33,11 @@ front-end/.env
 *.db
 coverage/
 htmlcov/
+
+full-life/mongo-data
+mongo-data
+package-lock.json
+package.json
 
 full-life/mongo-data
 mongo-data
