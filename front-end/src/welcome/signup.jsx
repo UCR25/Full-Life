@@ -1,4 +1,5 @@
-import React, { useState , useNavigate} from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin, googleLogout} from '@react-oauth/google';
 import './signup.css';
 import '../global.css';
@@ -6,8 +7,11 @@ import logo  from '../assets/logov3.png';
 import FocusBubble from './focusBubble';
 import Stars from './Stars';
 import Form from './form/form';
+import "./login.css";
+import { MdArrowBackIosNew } from "react-icons/md";
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [displayName, setDisplayName] = useState("");
     const [ZIP, setZIP] = useState("");
     const [googleCredential, setGoogleCredential] = useState(null);
@@ -34,7 +38,10 @@ const Signup = () => {
         <Stars/>
         <section className="body">
             <section className="title-panel flex">
-                {/* Back Button*/}
+                <div className="back-button" onClick={() => navigate("/")}>
+                    <MdArrowBackIosNew size={18} />
+                    <span>BACK</span>
+                </div>
                 <h1 className="padding4 pageTitle">Full-Life</h1>
                 <div className="logo-wrapper flex">
                     <img src={logo} alt="Full-Life Logo" className="welcomeLogo" />
@@ -46,7 +53,10 @@ const Signup = () => {
                 </div>
             </section>
             <section className="form-panel">
-                <Form/>
+                <Form 
+                    googleCredential={googleCredential} 
+                    displayName={displayName}
+                />
             </section>
         </section>
     </div>

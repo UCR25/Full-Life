@@ -58,7 +58,7 @@ class ProfileRepository:
 
     async def update_by_user_id(self, user_id: str, update_data: dict) -> Optional[dict]:
         res = await self.collection.update_one(
-            {"google_auth_id": user_id},
+            {"user_id": user_id},
             {"$set": update_data}
         )
         if not res.matched_count:
