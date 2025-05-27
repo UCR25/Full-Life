@@ -4,7 +4,6 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
-    # ▶️ use a named volume, not "./mongo-data"
     volumes:
       - mongo-data:/data/db
 
