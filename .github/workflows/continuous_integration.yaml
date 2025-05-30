@@ -26,11 +26,22 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run backend tests
+      - name: Run backend tests with HTML coverage
         run: |
           cd back-end
           export PYTHONPATH=.
-          pytest tests/
+          pytest tests/ --cov=. --cov-report=html
+
+      - name: Zip HTML coverage report
+        run: |
+          cd back-end
+          zip -r coverage-html.zip htmlcov/
+
+      - name: Upload backend coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-html
+          path: back-end/coverage-html.zip
 
   frontend-tests:
     name: Run Frontend Tests (Vitest)
@@ -50,13 +61,18 @@ jobs:
           cd front-end
           npm ci --legacy-peer-deps
 
-      - name: Run frontend tests
+      - name: Run frontend tests with coverage
         run: |
           cd front-end
           npx vitest run --coverage
-          
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4.6.2
+
+      - name: Zip frontend coverage report
+        run: |
+          cd front-end
+          zip -r coverage-html.zip coverage/
+
+      - name: Upload frontend coverage report
+        uses: actions/upload-artifact@v4
         with:
-          name: frontend-coverage-report
-          path: front-end/coverage/
+          name: frontend-coverage-html
+          path: front-end/coverage-html.zip
