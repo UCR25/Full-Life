@@ -54,4 +54,9 @@ jobs:
         run: |
           cd front-end
           npx vitest run --coverage
-
+          
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-coverage-report
+          path: front-end/coverage/
