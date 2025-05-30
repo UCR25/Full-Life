@@ -30,7 +30,7 @@ SAMPLE_EVENTS = [
     },
     {
         "user_ID": "105013398891910779346",
-        "event_list_ID": "000002",
+        "event_list_ID": "105013398891910779346",
         "user_date_time": "2025-05-25T14:30:00Z",
         "name": "STUFF",
         "address": "STUFF street",
@@ -61,7 +61,6 @@ class FakeCollection:
         ]
 
     async def find_one(self, query):
-        # not used here
         target = query.get("_id")
         return next((d for d in self._docs if d["_id"] == target), None)
 
@@ -75,6 +74,15 @@ class FakeCollection:
                 yield d
         return gen()
 
+    async def insert_one(self, data):
+        new_id = len(self._docs) + 1
+        doc = {**data, "_id": new_id}
+        self._docs.append(doc)
+        class InsertOneResult:
+            def __init__(self, inserted_id):
+                self.inserted_id = inserted_id
+        return InsertOneResult(inserted_id=new_id)
+
 @pytest.fixture
 def fake_collection():
     return FakeCollection()
@@ -82,14 +90,11 @@ def fake_collection():
 @pytest.mark.asyncio
 async def test_get_by_user_id_filters_correctly(fake_collection):
     repo = EventRepository(fake_collection)
-    # Log all docs
     print("All sample events:", json.dumps(fake_collection._docs, indent=2))
 
     results = await repo.get_by_user_id("105013398891910779346")
-    # Log filtered results
     print("Filtered by user_ID:", json.dumps(results, indent=2))
 
-    # Should return exactly the first three SAMPLE_EVENTS
     assert isinstance(results, list)
     assert len(results) == 3
 
@@ -100,20 +105,55 @@ async def test_get_by_user_id_filters_correctly(fake_collection):
 @pytest.mark.asyncio
 async def test_get_by_user_and_event_list_id_filters_correctly(fake_collection):
     repo = EventRepository(fake_collection)
-    # Log all docs again
     print("All sample events:", json.dumps(fake_collection._docs, indent=2))
 
     results = await repo.get_by_user_and_event_list_id(
         "105013398891910779346",
         "000001"
     )
-    # Log filtered results
     print("Filtered by user_ID + event_list_ID:", json.dumps(results, indent=2))
 
-    # Should return exactly the two events in list "000001"
     assert isinstance(results, list)
     assert len(results) == 2
 
     returned_names = {evt["name"] for evt in results}
     expected_names = {"Marathon Run", "Walking"}
     assert returned_names == expected_names
+
+@pytest.mark.asyncio
+async def test_create_event_assigns_new_id_and_serializes(fake_collection):
+    repo = EventRepository(fake_collection)
+
+    print("All sample events before create:", json.dumps(fake_collection._docs, indent=2))
+
+    new_event = {
+        "user_ID": "999",
+        "event_list_ID": "listX",
+        "user_date_time": "2025-05-30T10:00:00Z",
+        "name": "Test Event",
+        "address": "123 Test Blvd",
+        "description": "Ensure create works",
+        "startTime": "2025-05-30T10:00:00Z",
+        "endTime": "2025-05-30T12:00:00Z",
+        "categories": ["test", "unit"],
+    }
+
+    result = await repo.create(new_event)
+
+    print("Result of create:", json.dumps(result, indent=2))
+    print("All sample events after create:", json.dumps(fake_collection._docs, indent=2))
+
+    assert "_id" in result
+    assert isinstance(result["_id"], str)
+    assert int(result["_id"]) == 5
+
+    assert result["user_ID"] == new_event["user_ID"]
+    assert result["event_list_ID"] == new_event["event_list_ID"]
+    assert result["name"] == new_event["name"]
+    assert result["address"] == new_event["address"]
+    assert result["description"] == new_event["description"]
+    assert result["startTime"] == new_event["startTime"]
+    assert result["endTime"] == new_event["endTime"]
+    assert result["categories"] == new_event["categories"]
+
+    assert result["index"] is None
