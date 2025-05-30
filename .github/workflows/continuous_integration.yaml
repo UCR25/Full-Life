@@ -1,4 +1,4 @@
-name: Local Docker CI
+name: Local Docker CI:
 
 on:
   push:
@@ -56,7 +56,7 @@ jobs:
           npx vitest run --coverage
           
       - name: Upload coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: frontend-coverage-report
           path: front-end/coverage/
