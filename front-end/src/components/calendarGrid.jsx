@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './calendarGrid.css';
 import { onDateChange$ } from './calenderHeader.jsx';
+import { getUserSpecificKey } from '../utils/userUtils';
 
 const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -16,13 +17,15 @@ const CalendarGrid = () => {
 
   // Load calendar events from localStorage on component mount
   useEffect(() => {
-    const savedEvents = localStorage.getItem('calendarEvents');
+    const calendarKey = getUserSpecificKey('calendarEvents');
+    const savedEvents = localStorage.getItem(calendarKey);
     if (savedEvents) {
       setCalendarEvents(JSON.parse(savedEvents));
     }
     
     // Load todo tasks from localStorage
-    const savedTasks = localStorage.getItem('todoTasks');
+    const todoKey = getUserSpecificKey('todoTasks');
+    const savedTasks = localStorage.getItem(todoKey);
     if (savedTasks) {
       setTodoTasks(JSON.parse(savedTasks));
     }
@@ -31,7 +34,8 @@ const CalendarGrid = () => {
   // Watch for changes in todo tasks
   useEffect(() => {
     const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('todoTasks');
+      const todoKey = getUserSpecificKey('todoTasks');
+      const savedTasks = localStorage.getItem(todoKey);
       if (savedTasks) {
         setTodoTasks(JSON.parse(savedTasks));
       }
@@ -45,7 +49,8 @@ const CalendarGrid = () => {
 
   // Save calendar events to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+    const calendarKey = getUserSpecificKey('calendarEvents');
+    localStorage.setItem(calendarKey, JSON.stringify(calendarEvents));
   }, [calendarEvents]);
 
   const year = date.getFullYear();
