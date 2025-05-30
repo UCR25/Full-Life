@@ -2,7 +2,7 @@ name: Local Docker CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, Full-Life-BETA]
   pull_request:
 
 jobs:
