@@ -1,25 +1,36 @@
-// src/pages/Login.jsx
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { MdArrowBackIosNew } from "react-icons/md";
 import idkLogo from "../assets/calendar1.png";
 import Stars from "./Stars";
 import API from "../api.jsx";
-import { clearUserProfile } from "../utils/storage";
+import { logoutUser, isAuthenticated } from "../utils/authUtils";
 
 const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
-  // Clears session/token and only our 'user' key
+  // Use our new logoutUser utility instead
   const resetSession = () => {
-    googleLogout();
-    clearUserProfile();
-    localStorage.removeItem("user");
+    logoutUser();
   };
+  
+  // Check if user is already logged in
+  useEffect(() => {
+    if (isAuthenticated()) {
+      // User is already logged in, redirect to home
+      navigate('/user-home');
+    }
+    
+    // Check for login message
+    const loginMessage = sessionStorage.getItem('loginMessage');
+    if (loginMessage) {
+      setError(loginMessage);
+      sessionStorage.removeItem('loginMessage');
+    }
+  }, [navigate]);
 
   return (
     <div className="login-container">
@@ -74,7 +85,15 @@ const Login = () => {
                     // 2a) Found → persist & navigate
                     const backendProfile = res.data;
                     localStorage.setItem("user", JSON.stringify(backendProfile));
-                    navigate("/user-home");
+                    
+                    // Check if there's a redirect path stored
+                    const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+                    if (redirectPath) {
+                      sessionStorage.removeItem('redirectAfterLogin');
+                      navigate(redirectPath);
+                    } else {
+                      navigate("/user-home");
+                    }
                   })
                   .catch((err) => {
                     if (err.response?.status === 404) {

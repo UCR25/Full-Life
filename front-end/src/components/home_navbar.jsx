@@ -1,11 +1,11 @@
-// src/components/home_navbar.jsx
-
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./home_navbar.css";
+import { logoutUser } from "../utils/authUtils";
 
 const HomeNavbar = ({ toggleProfile }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDropdown = (e) => {
     e.stopPropagation();
@@ -16,6 +16,17 @@ const HomeNavbar = ({ toggleProfile }) => {
     e.stopPropagation();
     setDropdownOpen(false);
     toggleProfile();
+  };
+  
+  const handleLogout = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDropdownOpen(false);
+    
+    // Use the logoutUser utility to clear all user data
+    logoutUser();
+    // Navigate to login page
+    navigate('/login');
   };
 
   // guard in case there's no user yet
@@ -81,13 +92,13 @@ const HomeNavbar = ({ toggleProfile }) => {
                   <span className="dropdown-arrow">›</span>
                 </Link>
 
-                <Link to="/login" className="dropdown-item">
+                <div onClick={handleLogout} className="dropdown-item">
                   <span className="dropdown-icon">
                     <i className="fas fa-sign-out-alt"></i>
                   </span>
                   <span>Logout</span>
                   <span className="dropdown-arrow">›</span>
-                </Link>
+                </div>
               </div>
             )}
           </div>
