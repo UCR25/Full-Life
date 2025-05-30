@@ -53,4 +53,4 @@ jobs:
       - name: Run frontend tests
         run: |
           cd front-end
-          npx vitest run
+          npx vitest run --coverage
