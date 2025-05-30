@@ -97,14 +97,14 @@ jobs:
           </html>
           EOF
 
-      # ─── Zip & Upload ─────────────────────────────────────────
+      # ─── Zip & Upload (no nested folder) ───────────────────────
       - name: Zip combined coverage report
         run: |
           cd fullstack-coverage
-          zip -r ../fullstack-coverage.zip .
+          zip -r ../coverage.zip .
 
       - name: Upload fullstack coverage artifact
         uses: actions/upload-artifact@v4
         with:
           name: fullstack-coverage
-          path: fullstack-coverage.zip
+          path: coverage.zip
