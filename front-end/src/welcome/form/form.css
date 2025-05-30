@@ -1,0 +1,22 @@
+.form-nav {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  gap: 1rem; /* optional spacing between buttons */
+  margin-top: 1rem; /* optional spacing above the buttons */
+  padding: var(--spacing5);
+}
+.form-nav button {
+    font-size: var(--font-sm);
+    padding: var(--spacing3);
+    border-radius: 100px;
+    background: var(--color500);
+}
+.form-nav button:hover:enabled {
+    background: var(--color300);
+    transform: translateY(1px);
+    box-shadow: 0 4px 5px var(--color300);
+}
+.form-nav button:disabled {
+    background: rgb(180, 180, 180);
+}

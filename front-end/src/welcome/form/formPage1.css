@@ -1,0 +1,15 @@
+.login-link {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin: 1rem auto;
+}
+
+.login-link a {
+  color: white;
+  text-decoration: underline;
+}
+
+.login-link a:hover {
+  color: rgb(59, 179, 248);
+}

@@ -17,7 +17,6 @@ except Exception:
 
 # Collections
 profiles_collection     = db["profiles"]
-event_lists_collection  = db["event_lists"]
 event_nodes_collection  = db["event_nodes"]
 
 def get_db():
@@ -25,7 +24,7 @@ def get_db():
     Dependency for FastAPI routes:
         @app.get("/…")
         async def handler(db=Depends(get_db)):
-            # use db.profiles, db.event_lists, etc.
+            # use db.profiles, db.event_nodes
     """
     return db
 

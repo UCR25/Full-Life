@@ -1,0 +1,188 @@
+.left-panel {
+    position: fixed;
+    left: 5%;
+    top: 100px;
+    width: 22%;
+    height: calc(100vh - 140px);
+    background-color: #02070e;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgb(51, 147, 202);
+    border: 1px solid rgba(51, 147, 202);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Todo list title */
+.todo-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #4A90E2;
+    text-align: center;
+}
+
+/* Add task container */
+.add-task-container {
+    margin-bottom: 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.task-input-container {
+    margin-bottom: 10px;
+}
+
+.task-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #146acc;
+    background-color: rgba(74, 144, 226, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+.task-input::placeholder {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.task-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.task-date-container,
+.task-time-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-icon,
+.time-icon {
+    color: #4A90E2;
+}
+
+.date-input,
+.time-input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(74, 144, 226, 0.5);
+    background-color: rgba(74, 144, 226, 0.1);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.date-input::placeholder,
+.time-input::placeholder {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.add-task-btn {
+    width: 100%;
+    padding: 9px;
+    border-radius: 10px;
+    border: none;
+    background-color: #4A90E2;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-task-btn:hover {
+    background-color: #3a7bc8;
+}
+
+/* Tasks container */
+.tasks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.task-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid rgba(74, 144, 226, 0.2);
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    border-color: rgba(74, 144, 226, 0.4);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.task-item.completed {
+    opacity: 0.7;
+    border-color: rgba(74, 144, 226, 0.1);
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.task-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #4A90E2;
+}
+
+.task-text {
+    font-size: 1rem;
+    color: white;
+    flex: 1;
+    word-break: break-word;
+}
+
+.task-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 28px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.task-date,
+.task-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.delete-task-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-left: auto;
+    transition: color 0.3s ease;
+}
+
+.no-tasks {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}

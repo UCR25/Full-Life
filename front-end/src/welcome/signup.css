@@ -22,8 +22,6 @@
   }
 /* Title Panel */
 .title-panel {
-    display: flex;
-    flex-direction: column;
     background: var(--body-fill);
     backdrop-filter: var(--body-blur);
     border-radius: 2rem;
@@ -34,14 +32,14 @@
     flex-direction: column;
     overflow: hidden;
 }
-.title-panel {
-    background: var(--body-fill);
-}
 .title-text {
     transform: scale(1.8);
-    padding: var(--spacing2);
     line-height: var(--spacing5);
     margin-top: var(--spacing6);
+    margin-bottom: var(--spacing5);
+}
+.pageTitle {
+    padding: var(--spacing5)
 }
 .title-text h2 {
     max-width: calc(var(--font-lg) * 7);
