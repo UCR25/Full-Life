@@ -1,7 +1,7 @@
 # back-end/tests/test_event_node_filtering.py
 
 import pytest
-from databases.event_node_repository import EventRepository
+from databases.event_node_repository import EventRepository, SEEDS_FILE
 import json
 
 # Your four sample events
@@ -54,7 +54,6 @@ SAMPLE_EVENTS = [
 
 class FakeCollection:
     def __init__(self):
-        # preload docs, simulating they already have Mongo _id's
         self._docs = [
             {**evt, "_id": i + 1}
             for i, evt in enumerate(SAMPLE_EVENTS)
@@ -157,3 +156,34 @@ async def test_create_event_assigns_new_id_and_serializes(fake_collection):
     assert result["categories"] == new_event["categories"]
 
     assert result["index"] is None
+
+@pytest.mark.asyncio
+async def test_create_appends_to_seed_file(fake_collection, tmp_path, monkeypatch):
+    import databases.event_node_repository as repo_mod
+    temp_seed = tmp_path / "temp_event_seeds.json"
+    monkeypatch.setattr(repo_mod, "SEEDS_FILE", str(temp_seed))
+
+    repo = EventRepository(fake_collection)
+
+    new_event = {
+        "user_ID": "999",
+        "event_list_ID": "listX",
+        "user_date_time": "2025-05-30T10:00:00Z",
+        "name": "Seed Test",
+        "address": "456 Seed St",
+        "description": "Check seed file",
+        "startTime": "2025-05-30T14:00:00Z",
+        "endTime": "2025-05-30T16:00:00Z",
+        "categories": ["seed", "file"],
+    }
+
+    print("Temp seed file path:", temp_seed)
+    result = await repo.create(new_event)
+    print("Create returned:", json.dumps(result, indent=2))
+
+    with open(temp_seed, "r", encoding="utf-8") as f:
+        seeds = json.load(f)
+    print("Seeds file contents:", json.dumps(seeds, indent=2))
+
+    assert isinstance(seeds, list)
+    assert seeds[-1] == result
