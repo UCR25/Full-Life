@@ -1,9 +1,9 @@
 name: Local Docker CI
 
 on:
-#on all pushes and branch
   push:
     branches: 
+      - '**'
   pull_request:
 
 jobs:
