@@ -100,7 +100,8 @@ jobs:
       # ─── Zip & Upload ─────────────────────────────────────────
       - name: Zip combined coverage report
         run: |
-          zip -r fullstack-coverage.zip fullstack-coverage/
+          cd fullstack-coverage
+          zip -r ../fullstack-coverage.zip .
 
       - name: Upload fullstack coverage artifact
         uses: actions/upload-artifact@v4
