@@ -7,14 +7,15 @@ on:
   pull_request:
 
 jobs:
-  backend-tests:
-    name: Run Backend Tests (Pytest)
+  fullstack-tests:
+    name: Fullstack Tests & Coverage
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # ─── Backend ─────────────────────────────────────────────
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -26,31 +27,18 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run backend tests with HTML coverage
+      - name: Run backend tests with coverage
         run: |
           cd back-end
           export PYTHONPATH=.
           pytest tests/ --cov=. --cov-report=html
 
-      - name: Zip HTML coverage report
+      - name: Copy backend HTML coverage
         run: |
-          cd back-end
-          zip -r coverage-html.zip htmlcov/
+          mkdir -p fullstack-coverage/backend-coverage
+          cp -r back-end/htmlcov/* fullstack-coverage/backend-coverage/
 
-      - name: Upload backend coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-coverage-html
-          path: back-end/coverage-html.zip
-
-  frontend-tests:
-    name: Run Frontend Tests (Vitest)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      # ─── Frontend ─────────────────────────────────────────────
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -66,13 +54,56 @@ jobs:
           cd front-end
           npx vitest run --coverage
 
-      - name: Zip frontend coverage report
+      - name: Copy frontend HTML coverage
         run: |
-          cd front-end
-          zip -r coverage-html.zip coverage/
+          mkdir -p fullstack-coverage/frontend-coverage
+          cp -r front-end/coverage/* fullstack-coverage/frontend-coverage/
 
-      - name: Upload frontend coverage report
+      # ─── Create Unified Index Page ────────────────────────────
+      - name: Create unified coverage index
+        run: |
+          cat <<EOF > fullstack-coverage/index.html
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <title>Fullstack Coverage Report</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      background-color: #f9f9f9;
+                      padding: 2rem;
+                  }
+                  h1 {
+                      color: #333;
+                  }
+                  a {
+                      display: block;
+                      margin: 1rem 0;
+                      font-size: 1.2rem;
+                      color: #007acc;
+                      text-decoration: none;
+                  }
+                  a:hover {
+                      text-decoration: underline;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>Fullstack Test Coverage</h1>
+              <a href="backend-coverage/index.html" target="_blank">View Backend (Python) Coverage</a>
+              <a href="frontend-coverage/index.html" target="_blank">View Frontend (Vitest) Coverage</a>
+          </body>
+          </html>
+          EOF
+
+      # ─── Zip & Upload ─────────────────────────────────────────
+      - name: Zip combined coverage report
+        run: |
+          zip -r fullstack-coverage.zip fullstack-coverage/
+
+      - name: Upload fullstack coverage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-coverage-html
-          path: front-end/coverage-html.zip
+          name: fullstack-coverage
+          path: fullstack-coverage.zip
