@@ -18,7 +18,9 @@ class FakeCollection:
         return Result()
 
     async def find_one(self, query):
-        return next((d for d in self._docs if all(d.get(k) == v for k, v in query.items())), None)
+        if "_id" in query:
+            return next((d for d in self._docs if d["_id"] == query["_id"]), None)
+        return None
 
 @pytest.fixture
 def fake_collection():
@@ -27,7 +29,10 @@ def fake_collection():
 @pytest.fixture
 def tmp_seeds_file(tmp_path, monkeypatch):
     fake = tmp_path / "profile_seeds.json"
-    monkeypatch.setattr("databases.profile_repository.SEEDS_FILE", str(fake))
+    monkeypatch.setattr(
+        "databases.profile_repository.SEEDS_FILE",
+        str(fake),
+    )
     return str(fake)
 
 @pytest.mark.asyncio
@@ -43,9 +48,19 @@ async def test_create_profile_writes_db_and_seeds(fake_collection, tmp_seeds_fil
     }
 
     created = await repo.create(new_data)
-    assert created["user_id"] == "user123"
+
+    assert created == {
+        "user_id": "user123",
+        "username": "alice",
+        "email": "alice@example.com",
+        "hobbies": ["reading", "gaming"],
+        "picture": "http://example.com/alice.png",
+    }
+
+    stored = fake_collection._docs[0]
+    assert stored["user_id"] == "user123"
 
     with open(tmp_seeds_file, "r", encoding="utf-8") as f:
         seeds = json.load(f)
     assert isinstance(seeds, list)
-    assert seeds[-1]["user_id"] == "user123"
+    assert seeds[-1] == created

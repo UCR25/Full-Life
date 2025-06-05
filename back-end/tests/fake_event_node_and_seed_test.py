@@ -1,11 +1,8 @@
-# back-end/tests/fake_event_node_and_seed_test.py
-
 import pytest
-import json
 from databases.event_node_repository import EventRepository
+import json
 from datetime import datetime
 
-# Sample Events
 SAMPLE_EVENTS = [
     {
         "user_ID": "105013398891910779346",
@@ -61,12 +58,18 @@ class FakeCollection:
         ]
 
     async def find_one(self, query):
-        return next((d for d in self._docs if all(d.get(k) == v for k, v in query.items())), None)
+        if "_id" in query:
+            return next((d for d in self._docs if d["_id"] == query["_id"]), None)
+        return None
 
     def find(self, query):
-        matches = [d for d in self._docs if all(d.get(k) == v for k, v in query.items())]
+        matches = [
+            d for d in self._docs
+            if all(d.get(k) == v for k, v in query.items())
+        ]
+        matches.sort(key=lambda d: d.get("event_list_ID", ""), reverse=True)
         async def gen():
-            for d in sorted(matches, key=lambda x: x["event_list_ID"], reverse=True):
+            for d in matches:
                 yield d
         return gen()
 
@@ -87,19 +90,21 @@ def fake_collection():
 async def test_get_by_user_id_filters_correctly(fake_collection):
     repo = EventRepository(fake_collection)
     results = await repo.get_by_user_id("105013398891910779346")
+
     assert isinstance(results, list)
     assert len(results) == 3
-    returned_names = {evt["name"] for evt in results}
-    assert returned_names == {"Marathon Run", "Walking", "STUFF"}
+    names = {e["name"] for e in results}
+    assert names == {"Marathon Run", "Walking", "STUFF"}
 
 @pytest.mark.asyncio
 async def test_get_by_user_and_event_list_id_filters_correctly(fake_collection):
     repo = EventRepository(fake_collection)
     results = await repo.get_by_user_and_event_list_id("105013398891910779346", "000001")
+
     assert isinstance(results, list)
     assert len(results) == 2
-    returned_names = {evt["name"] for evt in results}
-    assert returned_names == {"Marathon Run", "Walking"}
+    names = {e["name"] for e in results}
+    assert names == {"Marathon Run", "Walking"}
 
 @pytest.mark.asyncio
 async def test_create_event_assigns_new_id_and_serializes(fake_collection):
@@ -113,14 +118,14 @@ async def test_create_event_assigns_new_id_and_serializes(fake_collection):
         "description": "Ensure create works",
         "startTime": datetime.fromisoformat("2025-05-30T10:00:00+00:00"),
         "endTime": datetime.fromisoformat("2025-05-30T12:00:00+00:00"),
-        "categories": ["test", "unit"],
+        "categories": ["test", "unit"]
     }
 
     result = await repo.create(new_event)
 
     assert "_id" in result
     assert isinstance(result["_id"], str)
-    assert result["user_ID"] == new_event["user_ID"]
+    assert result["user_ID"] == "999"
 
 @pytest.mark.asyncio
 async def test_create_appends_to_seed_file(fake_collection, tmp_path, monkeypatch):
@@ -138,10 +143,11 @@ async def test_create_appends_to_seed_file(fake_collection, tmp_path, monkeypatc
         "description": "Check seed file",
         "startTime": datetime.fromisoformat("2025-05-30T14:00:00+00:00"),
         "endTime": datetime.fromisoformat("2025-05-30T16:00:00+00:00"),
-        "categories": ["seed", "file"],
+        "categories": ["seed", "file"]
     }
 
     result = await repo.create(new_event)
+
     with open(temp_seed, "r", encoding="utf-8") as f:
         seeds = json.load(f)
 
