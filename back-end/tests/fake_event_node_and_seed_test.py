@@ -1,3 +1,5 @@
+#tests/fake_event_node_and_seed_test.py
+
 import pytest
 from databases.event_node_repository import EventRepository
 import json
@@ -50,6 +52,22 @@ SAMPLE_EVENTS = [
     }
 ]
 
+class FakeCursor:
+    def __init__(self, docs):
+        self._docs = docs
+
+    def sort(self, key, direction):
+        reverse = direction == -1
+        self._docs.sort(key=lambda d: d.get(key), reverse=reverse)
+        return self
+
+    def __aiter__(self):
+        return self._aiter()
+
+    async def _aiter(self):
+        for doc in self._docs:
+            yield doc
+
 class FakeCollection:
     def __init__(self):
         self._docs = [
@@ -67,11 +85,7 @@ class FakeCollection:
             d for d in self._docs
             if all(d.get(k) == v for k, v in query.items())
         ]
-        matches.sort(key=lambda d: d.get("event_list_ID", ""), reverse=True)
-        async def gen():
-            for d in matches:
-                yield d
-        return gen()
+        return FakeCursor(matches)
 
     async def insert_one(self, data):
         new_id = len(self._docs) + 1

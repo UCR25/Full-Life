@@ -26,6 +26,7 @@ class EventRepository:
         result = await self.collection.insert_one(data)
         doc = await self.collection.find_one({"_id": result.inserted_id})
         serialized = self._serialize(doc)
+        serialized["_id"] = str(doc["_id"])  # Ensure ID is string for testing compatibility
 
         # 2) Append to local seeds file
         try:
@@ -44,6 +45,7 @@ class EventRepository:
             json.dump(seeds, f, indent=2, default=str)
 
         return serialized
+
 
     async def get_by_user_id(self, user_id: str) -> List[dict]:
         cursor = self.collection.find({"user_ID": user_id}).sort("event_list_ID", -1)
