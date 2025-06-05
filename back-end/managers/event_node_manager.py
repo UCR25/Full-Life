@@ -54,3 +54,15 @@ async def update_event_by_event_id(event_id: str, update_data: dict) -> Optional
     Business-logic hook for updating an event by its event_list_ID.
     """
     return await _repo.update_by_event_id(event_id, update_data)
+
+async def generate_new_event_list_id(user_id: str) -> str:
+    """
+    Generate a new unique event_list_ID for a user.
+    """
+    return await _repo.generate_new_event_list_id(user_id)
+
+async def get_grouped_event_lists_by_user(user_id: str) -> List[dict]:
+    """
+    Business-logic hook for fetching all event lists grouped by user ID.
+    """
+    return await _repo.get_all_event_lists_grouped_by_user(user_id)

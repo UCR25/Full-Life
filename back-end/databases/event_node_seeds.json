@@ -56,7 +56,6 @@
     ]
   },
   {
-    "_id": "5",
     "user_ID": "999",
     "event_list_ID": "listX",
     "user_date_time": "2025-05-30T10:00:00Z",
@@ -72,7 +71,6 @@
     ]
   },
   {
-    "_id": "5",
     "user_ID": "999",
     "event_list_ID": "listX",
     "user_date_time": "2025-05-30T10:00:00Z",
@@ -88,7 +86,6 @@
     ]
   },
   {
-    "_id": "5",
     "user_ID": "999",
     "event_list_ID": "listX",
     "user_date_time": "2025-05-30T10:00:00Z",

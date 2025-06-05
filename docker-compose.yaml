@@ -4,11 +4,11 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
-    # ▶️ use a named volume for Mongo’s data
     volumes:
       - mongo-data:/data/db
 
   backend:
+    container_name: full-life-backend
     build:
       context: ./back-end
       dockerfile: Dockerfile
@@ -18,8 +18,6 @@ services:
       - mongo
     ports:
       - "8000:8000"
-    # 🔑 bind-mount your databases folder so writes inside the container
-    #    go straight to your host’s back-end/databases directory
     volumes:
       - ./back-end/databases:/app/databases
     command: >
@@ -27,20 +25,16 @@ services:
         until nc -z mongo 27017; do
           echo 'Waiting for Mongo…' && sleep 1;
         done
-
         echo 'Seeding profiles…'
         python databases/profile_seeds.py
-
-        # seed your event_nodes
         echo 'Seeding event_nodes…'
         python databases/event_node_seeds.py
-
-        # start FastAPI
         echo 'Starting FastAPI…'
         uvicorn main:app --host 0.0.0.0 --port 8000
       "
 
   frontend:
+    container_name: full-life-frontend
     build:
       context: ./front-end
     depends_on:
@@ -48,7 +42,5 @@ services:
     ports:
       - "80:80"
 
-# declare your named volume here
 volumes:
   mongo-data:
-    # driver: local   # (default)

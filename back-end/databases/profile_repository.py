@@ -5,6 +5,7 @@ import json
 from typing import List, Optional
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
+from models.profile import ProfileBase
 
 # Always load/write profile_seeds.json sitting next to this .py file
 SEEDS_FILE = os.path.join(os.path.dirname(__file__), "profile_seeds.json")
@@ -20,18 +21,15 @@ class ProfileRepository:
 
     @staticmethod
     def _serialize(doc: dict) -> dict:
-        return {
-            "user_id":  str(doc.get("user_id")),
-            "username": doc.get("username"),
-            "email":    doc.get("email"),
-            "hobbies":  doc.get("hobbies", []),
-            "picture":  doc.get("picture"),
-        }
+        if "_id" in doc and isinstance(doc["_id"], ObjectId):
+            doc["_id"] = str(doc["_id"])
+        # Convert to Pydantic ProfileBase and serialize to dict
+        return ProfileBase(**doc).model_dump()
 
     async def create(self, data: dict) -> dict:
         # 1) Insert into MongoDB
-        result     = await self.collection.insert_one(data)
-        doc        = await self.collection.find_one({"_id": result.inserted_id})
+        result = await self.collection.insert_one(data)
+        doc = await self.collection.find_one({"_id": result.inserted_id})
         serialized = self._serialize(doc)
 
         # 2) Append to local seeds file
