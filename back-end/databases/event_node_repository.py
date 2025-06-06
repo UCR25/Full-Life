@@ -89,12 +89,19 @@ class EventRepository:
 
     async def get_all_event_lists_grouped_by_user(self, user_id: str) -> List[dict]:
         cursor = self.collection.aggregate([
-            {"$match": {"user_ID": user_id}},
+            {
+                "$match": {
+                    "user_ID": user_id,
+                    "event_list_ID": {"$ne": "0"}  # exclude "0"
+                }
+            },
             {"$sort": {"event_list_ID": -1}},
-            {"$group": {
-                "_id": "$event_list_ID",
-                "events": {"$push": "$$ROOT"}
-            }},
+            {
+                "$group": {
+                    "_id": "$event_list_ID",
+                    "events": {"$push": "$$ROOT"}
+                }
+            },
             {"$sort": {"_id": -1}}
         ])
         results = []
@@ -106,6 +113,7 @@ class EventRepository:
                     event["_id"] = str(event["_id"])
             results.append(doc)
         return results
+
 
     async def save_event_nodes_and_get_grouped(self, user_id: str, nodes: List[EventNodeCreate]) -> List[dict]:
         new_id = await self.generate_new_event_list_id(user_id)
