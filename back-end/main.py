@@ -6,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from models.profile import ProfileCreate, ProfileOut
 from models.event_node import EventNodeCreate, EventNodeOut
 from models.query import QueryInput
-
 from managers.profile_manager import (
     create_profile, get_profile_by_user_id, update_profile_by_user_id,
     delete_profile_by_user_id, list_profiles,
@@ -28,7 +27,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://localhost:80", "http://localhost:5173", "http://localhost:8000"],
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:80",
+        "http://localhost:5173",
+        "http://localhost:8000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -112,25 +116,19 @@ async def api_update_event_by_user(user_id: str, payload: EventNodeCreate):
 
 @app.get("/events/generate-list-id/{user_id}")
 async def api_generate_event_list_id(user_id: str):
-    """
-    Generates a new, incremented event_list_ID for a specific user.
-    """
     new_id = await generate_new_event_list_id(user_id)
     return {"new_event_list_ID": new_id}
 
 @app.get("/events/grouped/by-user/{user_id}")
 async def api_get_grouped_event_lists_by_user(user_id: str):
-    """
-    Retrieves all event lists for the user, grouped by event_list_ID and sorted newest first.
-    """
     grouped = await get_grouped_event_lists_by_user(user_id)
     if not grouped:
         raise HTTPException(404, "No event lists found for this user")
     return grouped
 
-# ─── Event Controller Route ─────────────────────────────────────────────────────
+# ─── Query Events with Prompt ────────────────────────────────────────────────────
 @app.post("/query")
-async def process_query(query: QueryInput):
+async def api_process_query(query: QueryInput):
     try:
         return await event_controller.process_query(query)
     except Exception as e:

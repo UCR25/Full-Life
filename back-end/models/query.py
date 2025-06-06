@@ -6,4 +6,6 @@ class QueryInput(BaseModel):
     user_ID: str
     lat: float
     lon: float
-    user_date_time: Optional[datetime] = None
+    prompt: str
+    user_date_time: Optional[datetime] = None 
+

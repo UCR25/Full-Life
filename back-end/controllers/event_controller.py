@@ -30,7 +30,25 @@ def make_json_safe(doc):
 def normalize_title(title):
     return title.lower().replace("’", "'").strip()
 
+async def extract_date_from_prompt(prompt: str) -> datetime:
+    try:
+        chat = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "Extract a date from this prompt. Only return a date in 'YYYY-MM-DD' format. If no date is mentioned, return today's date."},
+                {"role": "user", "content": f"Prompt: {prompt}"}
+            ]
+        )
+        date_str = chat.choices[0].message.content.strip()
+        return datetime.fromisoformat(date_str)
+    except Exception as e:
+        print(f"[✖] Failed to extract date from prompt: {e}")
+        return datetime.utcnow()
+
 async def process_query(query: QueryInput):
+    # ─ Extract intended date ─
+    user_date = await extract_date_from_prompt(query.prompt)
+
     # ─ Weather Data ─
     try:
         r = requests.get(
@@ -71,7 +89,6 @@ async def process_query(query: QueryInput):
                 "description": e.get("description", "")
             } for e in events])
         )
-
         tag_response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -81,17 +98,14 @@ async def process_query(query: QueryInput):
         )
         content = tag_response.choices[0].message.content.strip()
 
-        # Strip code block if present
         if content.startswith("```"):
             content = content.split("```")[1].strip()
             if content.startswith("json"):
                 content = content[4:].strip()
 
         tag_data = json.loads(content)
-
     except Exception as e:
         print(f"[✖] GPT tagging failed: {e}")
-        print(f"[🧪] GPT raw response:\n{repr(content)}")
         tag_data = []
 
     tag_map = {
@@ -104,18 +118,18 @@ async def process_query(query: QueryInput):
     for e in events:
         addr = e.get("venue", {}).get("address") or e.get("address") or e.get("location", "No Address")
         if isinstance(addr, list): addr = ", ".join(addr)
-        dt = e.get("when") or e.get("date") or datetime.utcnow().isoformat()
-        if isinstance(dt, dict): dt = dt.get("start_date") or dt.get("when") or datetime.utcnow().isoformat()
+        dt = e.get("when") or e.get("date") or user_date.isoformat()
+        if isinstance(dt, dict): dt = dt.get("start_date") or dt.get("when") or user_date.isoformat()
         try:
             start_dt = datetime.fromisoformat(dt)
         except:
-            start_dt = datetime.utcnow()
+            start_dt = user_date
         title = e.get("title", "Untitled Event")
         tags = tag_map.get(normalize_title(title), [])
         event_nodes.append(EventNodeCreate(
             user_ID=query.user_ID,
-            event_list_ID="",  # manager will generate
-            user_date_time=query.user_date_time,
+            event_list_ID="",  # manager will assign
+            user_date_time=user_date,
             name=title,
             address=addr,
             description=e.get("description", ""),

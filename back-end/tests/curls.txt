@@ -17,5 +17,6 @@ curl -X GET "http://localhost:8000/events/by-user-and-event/10501339889191077934
 curl -X GET "http://localhost:8000/events/by-user-and-event/105013398891910779346/000002"   
 
 API Curls
-curl -X POST http://localhost:8000/query -H "Content-Type: application/json" -d "{\"user_ID\":\"1\",\"user_date_time\":\"2025-06-20T12:00:00Z\",\"lat\":40.7128,\"lon\":-74.0060}"
+curl -X POST http://localhost:8000/query -H "Content-Type: application/json" -d "{\"user_ID\":\"1\",\"lat\":40.7128,\"lon\":-74.0060,\"prompt\":\"I want something fun to do this weekend\"}"
+curl -X POST http://localhost:8000/query -H "Content-Type: application/json" -d "{\"user_ID\":\"1\",\"user_date_time\":\"2025-06-20T12:00:00Z\",\"lat\":40.7128,\"lon\":-74.0060,\"prompt\":\"Something outdoors\"}"
 curl -X GET http://localhost:8000/events/grouped/by-user/1
