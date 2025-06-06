@@ -92,15 +92,77 @@ const CalendarGrid = () => {
           newEvents[dateString] = [];
         }
         
-        // Add the event to the array for this date
-        newEvents[dateString] = [...newEvents[dateString], calendarEvent];
+        // Check if an event with the same original ID already exists on this date
+        const eventExists = newEvents[dateString].some(event => 
+          event.originalId === eventData.id && event.title === eventData.title
+        );
+        
+        if (!eventExists) {
+          // Only add the event if it doesn't already exist
+          newEvents[dateString] = [...newEvents[dateString], calendarEvent];
+          
+          // Save to localStorage
+          const storageKey = getUserSpecificKey('calendarEvents');
+          localStorage.setItem(storageKey, JSON.stringify(newEvents));
+          
+          // Also add the event to the to-do list
+          addEventToTodoList(eventData, dateString);
+          
+          console.log(`Event ${eventData.title} added to ${dateString}`);
+        } else {
+          console.log(`Event ${eventData.title} already exists on ${dateString}`);
+        }
         
         return newEvents;
       });
-      
-      console.log(`Event ${eventData.title} added to ${dateString}`);
     } catch (error) {
       console.error('Error handling drop:', error);
+    }
+  };
+  
+  // Function to add an event to the to-do list
+  const addEventToTodoList = (eventData, dateString) => {
+    try {
+      console.log('Adding event to todo list:', eventData);
+      
+      // Get the current to-do tasks from localStorage
+      const todoKey = getUserSpecificKey('todoTasks');
+      console.log('Todo key:', todoKey);
+      
+      const savedTasks = localStorage.getItem(todoKey);
+      console.log('Saved tasks:', savedTasks);
+      
+      let todoTasks = savedTasks ? JSON.parse(savedTasks) : [];
+      console.log('Parsed todo tasks:', todoTasks);
+      
+      // Create a new to-do task from the event data
+      const todoTask = {
+        id: `todo-${Date.now()}-${eventData.id}`,
+        text: eventData.title || 'Untitled Event',
+        date: dateString,
+        time: eventData.time || '',
+        completed: false,
+        fromEvent: true,  // Mark that this task was created from an event
+        category: eventData.category || '',
+        location: eventData.location || '',
+        eventId: eventData.id  // Reference to the original event
+      };
+      
+      console.log('Created todo task:', todoTask);
+      
+      // Add the new task to the to-do list
+      todoTasks = [...todoTasks, todoTask];
+      
+      // Save the updated to-do list back to localStorage
+      localStorage.setItem(todoKey, JSON.stringify(todoTasks));
+      console.log('Updated todo tasks in localStorage:', todoTasks);
+      
+      // Force a refresh of the todo list by dispatching a custom event
+      window.dispatchEvent(new CustomEvent('todoListUpdated'));
+      
+      console.log(`Event "${todoTask.text}" added to to-do list for ${dateString}`);
+    } catch (error) {
+      console.error('Error adding event to todo list:', error);
     }
   };
 
@@ -137,9 +199,11 @@ const CalendarGrid = () => {
     const dayEvents = calendarEvents[dateString] || [];
     
     // Get tasks for this day - using only the exact date string match to avoid duplication
+    // Filter out tasks that were created from events to prevent duplication
     const dayTasks = todoTasks.filter(task => {
       // Only use the exact string match to prevent timezone issues
-      return task.date === dateString;
+      // And exclude tasks that were created from events (they have fromEvent=true)
+      return task.date === dateString && !task.fromEvent;
     });
 
     boxes.push(
