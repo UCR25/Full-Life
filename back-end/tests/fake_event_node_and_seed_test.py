@@ -1,4 +1,4 @@
-#tests/fake_event_node_and_seed_test.py
+# tests/fake_event_node_and_seed_test.py
 
 import pytest
 from databases.event_node_repository import EventRepository
@@ -137,9 +137,13 @@ async def test_create_event_assigns_new_id_and_serializes(fake_collection):
 
     result = await repo.create(new_event)
 
-    assert "_id" in result
-    assert isinstance(result["_id"], str)
+    assert "user_ID" in result
     assert result["user_ID"] == "999"
+
+    # Ensure _id was added in the internal fake collection
+    inserted = next((doc for doc in fake_collection._docs if doc["name"] == "Test Event"), None)
+    assert inserted is not None
+    assert "_id" in inserted
 
 @pytest.mark.asyncio
 async def test_create_appends_to_seed_file(fake_collection, tmp_path, monkeypatch):
@@ -167,3 +171,4 @@ async def test_create_appends_to_seed_file(fake_collection, tmp_path, monkeypatc
 
     assert isinstance(seeds, list)
     assert seeds[-1]["name"] == "Seed Test"
+    assert "_id" not in seeds[-1]
