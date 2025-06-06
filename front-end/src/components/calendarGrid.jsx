@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './calendarGrid.css';
 import { onDateChange$ } from './calenderHeader.jsx';
 import { getUserSpecificKey } from '../utils/userUtils';
+import { FaTrash } from 'react-icons/fa';
 
 const weekdayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -91,15 +92,77 @@ const CalendarGrid = () => {
           newEvents[dateString] = [];
         }
         
-        // Add the event to the array for this date
-        newEvents[dateString] = [...newEvents[dateString], calendarEvent];
+        // Check if an event with the same original ID already exists on this date
+        const eventExists = newEvents[dateString].some(event => 
+          event.originalId === eventData.id && event.title === eventData.title
+        );
+        
+        if (!eventExists) {
+          // Only add the event if it doesn't already exist
+          newEvents[dateString] = [...newEvents[dateString], calendarEvent];
+          
+          // Save to localStorage
+          const storageKey = getUserSpecificKey('calendarEvents');
+          localStorage.setItem(storageKey, JSON.stringify(newEvents));
+          
+          // Also add the event to the to-do list
+          addEventToTodoList(eventData, dateString);
+          
+          console.log(`Event ${eventData.title} added to ${dateString}`);
+        } else {
+          console.log(`Event ${eventData.title} already exists on ${dateString}`);
+        }
         
         return newEvents;
       });
-      
-      console.log(`Event ${eventData.title} added to ${dateString}`);
     } catch (error) {
       console.error('Error handling drop:', error);
+    }
+  };
+  
+  // Function to add an event to the to-do list
+  const addEventToTodoList = (eventData, dateString) => {
+    try {
+      console.log('Adding event to todo list:', eventData);
+      
+      // Get the current to-do tasks from localStorage
+      const todoKey = getUserSpecificKey('todoTasks');
+      console.log('Todo key:', todoKey);
+      
+      const savedTasks = localStorage.getItem(todoKey);
+      console.log('Saved tasks:', savedTasks);
+      
+      let todoTasks = savedTasks ? JSON.parse(savedTasks) : [];
+      console.log('Parsed todo tasks:', todoTasks);
+      
+      // Create a new to-do task from the event data
+      const todoTask = {
+        id: `todo-${Date.now()}-${eventData.id}`,
+        text: eventData.title || 'Untitled Event',
+        date: dateString,
+        time: eventData.time || '',
+        completed: false,
+        fromEvent: true,  // Mark that this task was created from an event
+        category: eventData.category || '',
+        location: eventData.location || '',
+        eventId: eventData.id  // Reference to the original event
+      };
+      
+      console.log('Created todo task:', todoTask);
+      
+      // Add the new task to the to-do list
+      todoTasks = [...todoTasks, todoTask];
+      
+      // Save the updated to-do list back to localStorage
+      localStorage.setItem(todoKey, JSON.stringify(todoTasks));
+      console.log('Updated todo tasks in localStorage:', todoTasks);
+      
+      // Force a refresh of the todo list by dispatching a custom event
+      window.dispatchEvent(new CustomEvent('todoListUpdated'));
+      
+      console.log(`Event "${todoTask.text}" added to to-do list for ${dateString}`);
+    } catch (error) {
+      console.error('Error adding event to todo list:', error);
     }
   };
 
@@ -136,9 +199,11 @@ const CalendarGrid = () => {
     const dayEvents = calendarEvents[dateString] || [];
     
     // Get tasks for this day - using only the exact date string match to avoid duplication
+    // Filter out tasks that were created from events to prevent duplication
     const dayTasks = todoTasks.filter(task => {
       // Only use the exact string match to prevent timezone issues
-      return task.date === dateString;
+      // And exclude tasks that were created from events (they have fromEvent=true)
+      return task.date === dateString && !task.fromEvent;
     });
 
     boxes.push(
@@ -172,6 +237,20 @@ const CalendarGrid = () => {
               className="calendar-event"
               style={{ backgroundColor: getEventColor(event.category) }}
               title={`${event.title} - ${event.time ? formatTime(event.time) : ''}`}
+              draggable="true"
+              data-id={event.id}
+              data-date={dateString}
+              onDragStart={(e) => {
+                // Set the data to be transferred
+                e.dataTransfer.setData('application/json', JSON.stringify({
+                  ...event,
+                  calendarDate: dateString
+                }));
+                e.currentTarget.classList.add('dragging');
+              }}
+              onDragEnd={(e) => {
+                e.currentTarget.classList.remove('dragging');
+              }}
             >
               <div className="event-title">{event.title}</div>
               {event.time && <div className="event-time">{formatTime(event.time)}</div>}
@@ -202,16 +281,14 @@ const CalendarGrid = () => {
     if (!timeString) return '';
     
     try {
-      // Check if the time already includes AM/PM
       if (timeString.includes('AM') || timeString.includes('PM')) {
-        return timeString; // Already in the correct format
+        return timeString; 
       }
       
-      // Parse the time string (HH:MM format)
       const [hours, minutes] = timeString.split(':');
       
       if (!hours || isNaN(parseInt(hours)) || !minutes || isNaN(parseInt(minutes))) {
-        return timeString; // Return original if parsing fails
+        return timeString; 
       }
       
       const hoursNum = parseInt(hours);
@@ -229,8 +306,106 @@ const CalendarGrid = () => {
     }
   }
 
+  // Handle trash can drag over
+  const handleTrashDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    document.querySelector('.trash-can').classList.add('drag-over');
+  };
+
+  // Handle trash can drag leave
+  const handleTrashDragLeave = () => {
+    document.querySelector('.trash-can').classList.remove('drag-over');
+  };
+
+  // Handle drop on trash can
+  const handleTrashDrop = (e) => {
+    e.preventDefault();
+    document.querySelector('.trash-can').classList.remove('drag-over');
+    
+    try {
+      // Get the event data that was set in the drag start event
+      const eventData = JSON.parse(e.dataTransfer.getData('application/json'));
+      
+      if (eventData.calendarDate) {
+        setCalendarEvents(prev => {
+          const newEvents = { ...prev };
+          
+          // Filter out the event with the matching ID
+          if (newEvents[eventData.calendarDate]) {
+            newEvents[eventData.calendarDate] = newEvents[eventData.calendarDate].filter(
+              event => event.id !== eventData.id
+            );
+            
+            // If there are no more events for this date, remove the date entry
+            if (newEvents[eventData.calendarDate].length === 0) {
+              delete newEvents[eventData.calendarDate];
+            }
+          }
+          
+          return newEvents;
+        });
+        
+        console.log(`Event ${eventData.title} removed from calendar`);
+      }
+    } catch (error) {
+      console.error('Error handling trash drop:', error);
+    }
+  };
+
+  // Make calendar events draggable
+  const makeEventsDraggable = () => {
+    const calendarEvents = document.querySelectorAll('.calendar-event');
+    
+    calendarEvents.forEach(event => {
+      if (event.getAttribute('draggable') === 'true') return;
+      
+      event.setAttribute('draggable', 'true');
+      
+      event.addEventListener('dragstart', (e) => {
+        const eventId = event.getAttribute('data-id');
+        const eventDate = event.getAttribute('data-date');
+        
+        const eventData = calendarEvents[eventDate]?.find(ev => ev.id === eventId);
+        
+        if (eventData) {
+          // Set the data to be transferred
+          e.dataTransfer.setData('application/json', JSON.stringify(eventData));
+          event.classList.add('dragging');
+        }
+      });
+      
+      // Add drag end event listener
+      event.addEventListener('dragend', (e) => {
+        event.classList.remove('dragging');
+      });
+    });
+  };
+
+  useEffect(() => {
+    // Use setTimeout to ensure the DOM has been updated
+    const timeoutId = setTimeout(() => {
+      makeEventsDraggable();
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, [calendarEvents]);
+
   return (
-    <div className="calendar-grid">{boxes}</div>
+    <div className="calendar-grid-container">
+      <div className="trash-can-container">
+        <div 
+          className="trash-can" 
+          onDragOver={handleTrashDragOver}
+          onDragLeave={handleTrashDragLeave}
+          onDrop={handleTrashDrop}
+          title="Drag events here to delete"
+        >
+          <FaTrash />
+        </div>
+      </div>
+      <div className="calendar-grid">{boxes}</div>
+    </div>
   );
 };
 

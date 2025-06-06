@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './todo_list.css';
-import { FaPlus, FaTrash, FaCalendarAlt, FaClock } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaTag } from 'react-icons/fa';
 import { getUserSpecificKey } from '../utils/userUtils';
 
 const TodoList = () => {
@@ -9,13 +9,27 @@ const TodoList = () => {
     const [newDate, setNewDate] = useState('');
     const [newTime, setNewTime] = useState('');
     
-    // Load tasks from localStorage on component mount
-    useEffect(() => {
+    const loadTasks = () => {
         const storageKey = getUserSpecificKey('todoTasks');
         const savedTasks = localStorage.getItem(storageKey);
         if (savedTasks) {
             setTasks(JSON.parse(savedTasks));
         }
+    };
+    
+    useEffect(() => {
+        loadTasks();
+        
+        const handleTodoListUpdated = () => {
+            console.log('Todo list updated event received');
+            loadTasks();
+        };
+        
+        window.addEventListener('todoListUpdated', handleTodoListUpdated);
+        
+        return () => {
+            window.removeEventListener('todoListUpdated', handleTodoListUpdated);
+        };
     }, []);
     
     // Save tasks to localStorage whenever tasks change
@@ -159,7 +173,7 @@ const TodoList = () => {
                     tasks.map(task => (
                         <div 
                             key={task.id} 
-                            className={`task-item ${task.completed ? 'completed' : ''}`}
+                            className={`task-item ${task.completed ? 'completed' : ''} ${task.fromEvent ? 'from-event' : ''}`}
                         >
                             <div className="task-checkbox-container">
                                 <input 
@@ -169,6 +183,7 @@ const TodoList = () => {
                                     onChange={() => toggleComplete(task.id)}
                                 />
                                 <span className="task-text">{task.text}</span>
+                                {task.fromEvent && <span className="event-badge">Event</span>}
                             </div>
                             
                             <div className="task-details">
@@ -181,6 +196,18 @@ const TodoList = () => {
                                 {task.time && (
                                     <div className="task-time">
                                         <FaClock /> {formatTime(task.time)}
+                                    </div>
+                                )}
+                                
+                                {task.location && (
+                                    <div className="task-location">
+                                        <FaMapMarkerAlt /> {task.location}
+                                    </div>
+                                )}
+                                
+                                {task.category && (
+                                    <div className="task-category">
+                                        <FaTag /> {task.category}
                                     </div>
                                 )}
                                 

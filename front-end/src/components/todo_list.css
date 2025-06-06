@@ -133,6 +133,27 @@
     color: rgba(255, 255, 255, 0.5);
 }
 
+.task-item.from-event {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.event-badge {
+    background-color: #4A90E2;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+.task-location {
+    color: #e29a4a;
+}
+
+.task-category {
+    color: #9a4ae2;
+}
+
 .task-checkbox-container {
     display: flex;
     align-items: center;
@@ -161,10 +182,13 @@
     margin-left: 28px;
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.7);
+    flex-wrap: wrap;
 }
 
 .task-date,
-.task-time {
+.task-time,
+.task-location,
+.task-category {
     display: flex;
     align-items: center;
     gap: 5px;
