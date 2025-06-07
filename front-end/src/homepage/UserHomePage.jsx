@@ -5,9 +5,11 @@ import TodoList from "../components/todo_list";
 import Calendar from "../components/calendar";
 import EventList from "../components/event_list";
 import SimpleProfile from "../components/navbar_info/SimpleProfile";
+import Support from "../components/navbar_info/support";
 
 const UserHomePage = () => {
     const [showProfile, setShowProfile] = useState(false);
+    const [showSupport, setShowSupport] = useState(false);
     const [profileText, setProfileText] = useState("");
     const [user, setUser] = useState(null);
     
@@ -22,8 +24,8 @@ const UserHomePage = () => {
     const toggleProfile = () => {
         const next = !showProfile;
         setShowProfile(next);
-
         if (next) {
+            setShowSupport(false);
             if (user) {
                 // Use the profile data from localStorage
                 const displayName = user.username || user.name || 'Unknown';
@@ -42,15 +44,24 @@ const UserHomePage = () => {
             }
         }
     };
+    
+    // Toggle support visibility
+    const toggleSupport = () => {
+        const next = !showSupport;
+        setShowSupport(next);
+        if (next) {
+            setShowProfile(false);
+        }
+    };
 
     return (
         <div className="user-home-container">
-            {/* Only show navbar when not showing profile */}
-            {!showProfile && <HomeNavbar toggleProfile={toggleProfile} />}
+            {!showProfile && !showSupport && <HomeNavbar toggleProfile={toggleProfile} toggleSupport={toggleSupport} />}
             
-            {/* Show profile or main content based on state */}
             {showProfile ? (
                 <SimpleProfile goBack={() => setShowProfile(false)} profileText={profileText} />
+            ) : showSupport ? (
+                <Support onClose={() => setShowSupport(false)} />
             ) : (
                 <div className="main-content">
                     <TodoList />
