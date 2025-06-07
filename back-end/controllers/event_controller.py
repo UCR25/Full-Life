@@ -14,7 +14,8 @@ from managers.event_node_manager import save_event_nodes_and_get_grouped
 OPEN_API_KEY = os.getenv("OPEN_API_KEY")
 OPENWEATHER_API_KEY = os.getenv("OPEN_WEATHER_API_TOKEN")
 SERPAPI_API_KEY = os.getenv("SERP_API_KEY")
-client = OpenAI(api_key=OPEN_API_KEY)
+os.environ["OPENAI_API_KEY"] = OPEN_API_KEY if OPEN_API_KEY else ""
+client = OpenAI()
 
 def make_json_safe(doc):
     if isinstance(doc, dict):
