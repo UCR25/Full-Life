@@ -63,7 +63,42 @@
     background-color: #3a7bc8;
 }
 
-/* Event tags container */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.event-summary {
+    background-color: rgba(51, 147, 202, 0.15);
+    border: 1px solid rgba(51, 147, 202, 0.5);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4A90E2;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.event-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 8px;
+    font-style: italic;
+}
+
 .event-tags-container {
     display: flex;
     flex-wrap: wrap;

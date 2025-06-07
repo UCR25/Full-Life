@@ -1,5 +1,5 @@
 import os, json
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from openai import OpenAI
@@ -10,13 +10,13 @@ from models.query import QueryInput
 from models.event_node import EventNodeCreate
 from managers.event_node_manager import save_event_nodes_and_get_grouped
 
-# API keys
+# ─── API Keys ───────────────────────────────────────────────────────────────────
 OPEN_API_KEY = os.getenv("OPEN_API_KEY")
 OPENWEATHER_API_KEY = os.getenv("OPEN_WEATHER_API_TOKEN")
 SERPAPI_API_KEY = os.getenv("SERP_API_KEY")
-os.environ["OPENAI_API_KEY"] = OPEN_API_KEY if OPEN_API_KEY else ""
-client = OpenAI()
+client = OpenAI(api_key=OPEN_API_KEY)
 
+# ─── Helpers ────────────────────────────────────────────────────────────────────
 def make_json_safe(doc):
     if isinstance(doc, dict):
         return {k: make_json_safe(v) for k, v in doc.items()}
@@ -33,24 +33,67 @@ def normalize_title(title):
 
 async def extract_date_from_prompt(prompt: str) -> datetime:
     try:
+        local_today_str = datetime.now().strftime('%Y-%m-%d')
         chat = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "Extract a date from this prompt. Only return a date in 'YYYY-MM-DD' format. If no date is mentioned, return today's date."},
+                {
+                    "role": "system",
+                    "content": (
+                        f"Extract a date from the user's prompt. "
+                        f"If the prompt doesn't include a date, assume today is '{local_today_str}' and return that. "
+                        "Only return a date in 'YYYY-MM-DD' format."
+                    )
+                },
                 {"role": "user", "content": f"Prompt: {prompt}"}
             ]
         )
         date_str = chat.choices[0].message.content.strip()
-        return datetime.fromisoformat(date_str)
+        dt = datetime.fromisoformat(date_str).replace(tzinfo=timezone.utc)
+
+        if dt.year < 2024:
+            dt = dt.replace(year=datetime.now().year)
+
+        return dt
     except Exception as e:
         print(f"[✖] Failed to extract date from prompt: {e}")
-        return datetime.utcnow()
+        return datetime.now().replace(tzinfo=timezone.utc)
 
+async def parse_event_datetime(raw: str, fallback: datetime) -> datetime:
+    try:
+        dt = datetime.fromisoformat(raw)
+        if dt.year < 2024:
+            raise ValueError("Suspicious old year, re-parsing")
+        return dt.replace(tzinfo=timezone.utc)
+    except:
+        pass
+
+    try:
+        prompt = (
+            f"Convert this event time string to full ISO 8601 format (YYYY-MM-DDTHH:MM:SS). "
+            f"If year is missing, assume {fallback.year}. If time is missing, default to 18:00. Return only the datetime string.\nInput: {raw}"
+        )
+        chat = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a strict datetime fixer."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        clean = chat.choices[0].message.content.strip()
+        dt = datetime.fromisoformat(clean)
+        if dt.year < 2024:
+            dt = dt.replace(year=fallback.year)
+        return dt.replace(tzinfo=timezone.utc)
+    except Exception as e:
+        print(f"[✖] Could not parse datetime '{raw}': {e}")
+        return fallback.replace(hour=18, minute=0, second=0, tzinfo=timezone.utc)
+
+# ─── Main Handler ───────────────────────────────────────────────────────────────
 async def process_query(query: QueryInput):
-    # ─ Extract intended date ─
     user_date = await extract_date_from_prompt(query.prompt)
 
-    # ─ Weather Data ─
+    # ─ Weather API ─
     try:
         r = requests.get(
             "https://api.openweathermap.org/data/2.5/weather",
@@ -66,7 +109,7 @@ async def process_query(query: QueryInput):
     desc = w["weather"][0]["description"]
     loc_str = f"{w.get('name', query.lat)},{w.get('sys', {}).get('country', query.lon)}"
 
-    # ─ SerpAPI Events ─
+    # ─ Events via SerpAPI ─
     try:
         search = GoogleSearch({
             "engine": "google_events",
@@ -81,7 +124,7 @@ async def process_query(query: QueryInput):
     if not events:
         raise HTTPException(404, detail="No events found.")
 
-    # ─ GPT Category Tags ─
+    # ─ GPT Tagging ─
     try:
         tag_prompt = (
             "Return only JSON list like [{\"title\": ..., \"tags\": [...]}] for these events:\n\n"
@@ -98,12 +141,10 @@ async def process_query(query: QueryInput):
             ]
         )
         content = tag_response.choices[0].message.content.strip()
-
         if content.startswith("```"):
             content = content.split("```")[1].strip()
             if content.startswith("json"):
                 content = content[4:].strip()
-
         tag_data = json.loads(content)
     except Exception as e:
         print(f"[✖] GPT tagging failed: {e}")
@@ -114,22 +155,24 @@ async def process_query(query: QueryInput):
         for i in tag_data if isinstance(i, dict)
     }
 
-    # ─ Convert to EventNodeCreate list ─
+    # ─ Build EventNodeCreate list ─
     event_nodes = []
     for e in events:
         addr = e.get("venue", {}).get("address") or e.get("address") or e.get("location", "No Address")
-        if isinstance(addr, list): addr = ", ".join(addr)
-        dt = e.get("when") or e.get("date") or user_date.isoformat()
-        if isinstance(dt, dict): dt = dt.get("start_date") or dt.get("when") or user_date.isoformat()
-        try:
-            start_dt = datetime.fromisoformat(dt)
-        except:
-            start_dt = user_date
+        if isinstance(addr, list):
+            addr = ", ".join(addr)
+
+        raw_dt = e.get("when") or e.get("date") or user_date.isoformat()
+        if isinstance(raw_dt, dict):
+            raw_dt = raw_dt.get("start_date") or raw_dt.get("when") or user_date.isoformat()
+        start_dt = await parse_event_datetime(raw_dt, fallback=user_date)
+
         title = e.get("title", "Untitled Event")
         tags = tag_map.get(normalize_title(title), [])
+
         event_nodes.append(EventNodeCreate(
             user_ID=query.user_ID,
-            event_list_ID="",  # manager will assign
+            event_list_ID="",
             user_date_time=user_date,
             name=title,
             address=addr,
@@ -139,10 +182,9 @@ async def process_query(query: QueryInput):
             categories=tags
         ))
 
-    # ─ Save to DB and Get Grouped ─
+    # ─ Save & Group ─
     grouped = await save_event_nodes_and_get_grouped(query.user_ID, event_nodes)
 
-    # ─ GPT Summary ─
     try:
         summary_prompt = (
             f"Hello from {loc_str}. The weather is {temp_f:.0f}°F and {desc}. "
@@ -164,3 +206,4 @@ async def process_query(query: QueryInput):
         "summary": summary,
         "event_lists": [make_json_safe(doc) for doc in grouped]
     })
+    

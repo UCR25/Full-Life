@@ -61,7 +61,7 @@ const EventList = () => {
                 user_ID: userId,
                 lat: lat,
                 lon: lon,
-                prompt: userPrompt || 'fun events this weekend',
+                prompt: userPrompt,
                 user_date_time: new Date().toISOString()
             };
             
@@ -96,18 +96,27 @@ const EventList = () => {
                             const formattedDate = eventDate.toISOString().split('T')[0];
                             const formattedTime = eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                             
-                            apiEvents.push({
-                                id: event._id || eventId++,
-                                title: event.name || 'Untitled Event',
-                                location: event.address || 'No location',
-                                date: formattedDate,
-                                time: formattedTime,
-                                distance: event.distance || Math.floor(Math.random() * 10) + 0.5 + ' miles',
-                                category: event.categories && event.categories.length > 0 ? event.categories[0] : 'General',
-                                tags: event.categories || ['Event'],
-                                isHighlighted: true,
-                                relevanceScore: 1
-                            });
+                            // Check for duplicate events (same name and location)
+                            const isDuplicate = apiEvents.some(e => 
+                                e.title === (event.name || 'Untitled Event') && 
+                                e.location === (event.address || 'No location')
+                            );
+                            
+                            if (!isDuplicate) {
+                                apiEvents.push({
+                                    id: event._id || eventId++,
+                                    title: event.name || 'Untitled Event',
+                                    location: event.address || 'No location',
+                                    date: formattedDate,
+                                    time: formattedTime,
+                                    distance: event.distance || Math.floor(Math.random() * 10) + 0.5 + ' miles',
+                                    category: event.categories && event.categories.length > 0 ? event.categories[0] : 'General',
+                                    tags: event.categories || ['Event'],
+                                    description: event.description || '',
+                                    isHighlighted: true,
+                                    relevanceScore: 1
+                                });
+                            }
                         });
                     }
                 });
@@ -275,6 +284,9 @@ const EventList = () => {
                                 <p className="event-date">
                                     <FaCalendarAlt /> {event.date} at {event.time}
                                 </p>
+                                {event.description && (
+                                    <p className="event-description">{event.description.length > 100 ? `${event.description.substring(0, 100)}...` : event.description}</p>
+                                )}
                             </div>
                             <div className="event-tags">
                                 {event.tags.map((tag, idx) => (
