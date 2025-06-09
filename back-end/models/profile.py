@@ -9,6 +9,7 @@ class ProfileBase(BaseModel):
         default_factory=list,
         description="List of user hobbies"
     )
+    picture: str            = Field(..., description="Picture from google")
 
 class ProfileCreate(ProfileBase):
     """Payload for POST /profiles"""

@@ -1,5 +1,11 @@
+# --- Core app dependencies ---
 fastapi
 uvicorn[standard]
 python-dotenv
-motor            
-pydantic           
+motor
+pydantic
+email-validator>=1.1
+
+# --- Testing dependencies ---
+pytest
+pytest-asyncio

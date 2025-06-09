@@ -1,0 +1,157 @@
+.simple-profile-container {
+  min-height: 100vh;
+  padding-top: 100px;
+}
+
+.simple-profile-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #4A90E2;
+}
+
+.simple-profile-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.back-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #4A90E2;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.back-button {
+  left: 30%;
+  top: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  color: #4A90E2;
+  border: 1px solid #4A90E2;
+  border-radius: 20px;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.back-arrow:hover {
+  background: #3b82f6;
+  transform: translateX(-5px);
+}
+
+.simple-profile-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 0 10px rgb(51, 147, 202);
+  border: 1px solid rgba(51, 147, 202);
+  margin-top: 30px;
+}
+
+.simple-profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.simple-profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4A90E2;
+  box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+  margin-bottom: 15px;
+}
+
+.simple-profile-image-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #135aab;
+  color: white;
+  font-size: 50px;
+  border: 3px solid #4A90E2;
+  box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+  margin-bottom: 15px;
+}
+
+.simple-profile-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #fff;
+}
+
+.simple-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.simple-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-label {
+  font-weight: bold;
+  color: #6C63FF;
+  font-size: 1.1rem;
+}
+
+.info-value {
+  color: #ddd;
+}
+
+.simple-hobbies-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.simple-hobby-tag {
+  background-color: rgba(74, 144, 226, 0.2);
+  border: 1px solid rgba(74, 144, 226, 0.5);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .simple-profile-content {
+    padding: 15px;
+  }
+  
+  .simple-profile-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .simple-profile-image,
+  .simple-profile-image-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .simple-profile-header h1 {
+    font-size: 1.5rem;
+  }
+}

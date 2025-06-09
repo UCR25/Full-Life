@@ -1,0 +1,170 @@
+.right-panel {
+    position: fixed;
+    left: 73%;
+    top: 100px;
+    width: 22%;
+    height: calc(100vh - 140px);
+    background-color: #02070e;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgb(51, 147, 202);
+    border: 1px solid rgba(51, 147, 202);
+    padding: 20px;
+    overflow-y: auto;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Event list title */
+.event-list-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #4A90E2;
+    text-align: center;
+}
+
+/* Prompt bar styling */
+.prompt-container {
+    position: relative;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.prompt-input {
+    width: 100%;
+    height: 80px;
+    padding: 12px 50px 12px 15px;
+    border-radius: 20px;
+    border: 1px solid #4A90E2;
+    background-color: rgba(74, 144, 226, 0.1);
+    color: white;
+    font-size: 1rem;
+    resize: none;
+}
+
+.prompt-input::placeholder {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.prompt-submit-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #4A90E2;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.prompt-submit-btn:hover {
+    background-color: #3a7bc8;
+}
+
+/* Event tags container */
+.event-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.event-tag {
+    background-color: rgba(74, 144, 226, 0.2);
+    border: 1px solid #4A90E2;
+    border-radius: 15px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.event-tag:hover {
+    background-color: rgba(74, 144, 226, 0.4);
+}
+
+/* Events list */
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Event card */
+.event-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid rgba(74, 144, 226, 0.3);
+    transition: all 0.3s ease;
+    cursor: grab;
+    position: relative;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.2);
+    border-color: rgba(74, 144, 226, 0.6);
+}
+
+.event-card.dragging {
+    cursor: grabbing;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.event-title {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #7ab2f3;
+}
+
+.event-distance {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.event-details {
+    margin-bottom: 10px;
+}
+
+.event-location, .event-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    margin: 5px 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.event-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.event-tag-pill {
+    background-color: rgba(74, 144, 226, 0.15);
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.no-events {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7);
+}

@@ -1,8 +1,8 @@
 # profile_manager.py
 
 from typing import Dict, Optional, List
-from profile_repository import ProfileRepository
-from mongo_client import profiles_collection
+from databases.profile_repository import ProfileRepository
+from databases.mongo_client import profiles_collection
 
 # single repo instance
 _repo = ProfileRepository(profiles_collection)

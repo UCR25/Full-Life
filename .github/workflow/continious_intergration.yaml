@@ -1,0 +1,55 @@
+name: Local Docker CI
+
+on:
+#on all pushes and branch
+  push:
+    branches: 
+  pull_request:
+
+jobs:
+  backend-tests:
+    name: Run Backend Tests (Pytest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13.3'
+
+      - name: Install Python dependencies
+        run: |
+          cd back-end
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run backend tests
+        run: |
+          cd back-end
+          pytest tests/
+
+  frontend-tests:
+    name: Run Frontend Tests (Vitest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.15.1'
+
+      - name: Install frontend dependencies
+        run: |
+          cd front-end
+          npm tests
+
+      - name: Run frontend tests
+        run: |
+          cd front-end
+          npx vitest run
