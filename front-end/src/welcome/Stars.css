@@ -1,0 +1,29 @@
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .star {
+    position: absolute;
+    background: #00f7ff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+    animation: twinkle 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }

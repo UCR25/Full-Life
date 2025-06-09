@@ -1,0 +1,43 @@
+# OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python
+__pycache__/    
+*.py[cod]
+*$py.class
+.env
+*.env.*        
+venv/
+env/
+.venv/
+
+# Caches
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Docker
+docker-compose.override.yml
+*.log
+
+# Node
+node_modules/
+front-end/dist/
+front-end/build/
+front-end/.env  
+
+#  Misc
+*.sqlite3
+*.db
+coverage/
+htmlcov/
+
+full-life/mongo-data
+mongo-data
+package-lock.json
+package.json
+
+full-life/mongo-data
+mongo-data

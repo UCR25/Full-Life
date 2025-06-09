@@ -1,0 +1,47 @@
+// src/pages/GoogleLogin.tsx
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { saveUserProfile } from '../utils/storage';
+
+declare const google: any;
+
+export default function GoogleLogin() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse,
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('g_id_signin'),
+      { theme: 'filled_blue', size: 'large' }
+    );
+  }, []);
+
+  const handleCredentialResponse = async (response: { credential: string }) => {
+    try {
+      // 2. Send the Google ID token to your backend
+      const res = await axios.post('/api/auth/google', {
+        id_token: response.credential,
+      });
+
+      // 3. Backend returns { profile } if exists, or { needsProfile: true, draft: { … } }
+      if (res.data.profile) {
+        // existing user
+        saveUserProfile(res.data.profile);
+        navigate('/dashboard');
+      } else {
+        // new user: prefill draft and start profile flow
+        localStorage.setItem('profileDraft', JSON.stringify(res.data.draft));
+        navigate('/step-1');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Authentication failed');
+    }
+  };
+
+  return <div id="g_id_signin"></div>;
+}

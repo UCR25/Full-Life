@@ -1,0 +1,46 @@
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    container_name: full-life-backend
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    env_file:
+      - ./back-end/.env
+    depends_on:
+      - mongo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back-end/databases:/app/databases
+    command: >
+      sh -c "
+        until nc -z mongo 27017; do
+          echo 'Waiting for Mongo…' && sleep 1;
+        done
+        echo 'Seeding profiles…'
+        python databases/profile_seeds.py
+        echo 'Seeding event_nodes…'
+        python databases/event_node_seeds.py
+        echo 'Starting FastAPI…'
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
+
+  frontend:
+    container_name: full-life-frontend
+    build:
+      context: ./front-end
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mongo-data:

@@ -1,0 +1,12 @@
+1. Be in back-end folder
+2. Download dependencies:
+    a. pip install pytest
+    b. pip install motor pymongo
+    c. pip install pytest-asyncio
+3. Do one of the commands below:
+
+detailed report
+python -m pytest -v -s tests/
+
+pass or not
+python -m pytest tests/

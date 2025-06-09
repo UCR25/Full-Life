@@ -1,0 +1,47 @@
+[
+  {
+    "user_id": "105013398891910779346",
+    "username": "sneha_does_stuff",
+    "email": "snehagrg14@gmail.com",
+    "hobbies": [
+      "hiking",
+      "stuff",
+      "blah"
+    ],
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocJU6j5bLKF1aWVYr7Xd_KSGmtEyo-p0_fIQsNPa_rVJfi_Mwys=s96-c"
+  },
+  {
+    "user_id": "112884144575746939054",
+    "username": "matthew_does_stuff_too",
+    "email": "mbraw003@ucr.edu",
+    "hobbies": [
+      "hiking",
+      "guitar",
+      "working out",
+      "gaming",
+      "reading",
+      "relaxing",
+      "stuff",
+      "blah"
+    ],
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocJU6j5bLKF1aWVYr7Xd_KSGmtEyo-p0_fIQsNPa_rVJfi_Mwys=s96-c"
+  },
+  {
+    "user_id": "112123854122200279104",
+    "username": "matthew",
+    "email": "phd.boomer@gmail.com",
+    "hobbies": [
+      "Running",
+      "Sports",
+      "Nature",
+      "Arts & Crafts",
+      "Music",
+      "Film",
+      "Travel",
+      "Food",
+      "Cooking",
+      "Games"
+    ],
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocKj-A8_ASdLGCQ0B8Lrn3KY7Pm8unpFNss-Wuv6Mec6ILhEEvc=s96-c"
+  }
+]

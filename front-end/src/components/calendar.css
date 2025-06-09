@@ -1,0 +1,14 @@
+.middle-panel {
+    position: fixed;
+    left: 29%;
+    top: 100px;
+    width: 42%;
+    height: calc(100vh - 140px);
+    background-color: #02070e;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgb(51, 147, 202);
+    border: 1px solid rgba(51, 147, 202);
+    padding: 20px;
+    overflow: hidden;
+    color: white;
+}

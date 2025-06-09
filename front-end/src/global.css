@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Variables */
+:root {
+    --color100: hsla(200, 43%, 91%, 1);
+    --color300: hsla(200, 69%, 67%, 1);
+    --color500: hsla(200, 78%, 50%, 1);
+    --color700: hsla(200, 100%, 35%, 1);
+    --color900: hsla(200, 100%, 13%, 1);
+    --accent: hsla(275, 100%, 88%, 1);
+    --text: hsl(0, 0%, 100%, 1);
+
+    --background-fill: linear-gradient(135deg, #0a1f58 0%, #000000 100%);
+    --body-fill: hsla(360 0 100 / 0.05);
+    --body-blur: blur(40px);
+
+    --box-shadow-light: 0 8px 8px hsla(360 0 0 / 0.6);
+    --box-shadow-medium: 0 8px 16px hsla(360 0 0 / 0.4);
+    --box-shadow-heavy: 0 8px 32px hsla(360 0 0 / 0.2);
+
+    --ff: "Roboto", sans-serif;
+    --font-sm: 0.875rem;
+    --font-md: 1rem;
+    --font-lg: 1.25rem;
+    --font-xl: 1.5rem;
+    --weight-regular: 400;
+    --weight-bold: 700;
+
+    --spacing1: 4px;
+    --spacing2: 8px;
+    --spacing3: 16px;
+    --spacing4: 20px;
+    --spacing5: 40px;
+    --spacing6: 80px;
+    --spacing7: 160px;
+}
+
+/* Global Styles */
+html {
+    scroll-behavior: smooth;
+}
+#root {
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+body {
+    text-wrap: pretty;
+    font-family: var(--ff);
+    font-size: var(--font-sm);
+    font-weight: var(--weight-regular);
+}
+
+h1, h2, p {
+    color: var(--text);
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* Utility Classes */
+section {
+    max-width: 1080px;
+}
+
+.centering {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing4);
+    flex-wrap: wrap;
+}
+
+.reverse {
+    flex-direction: row-reverse;
+}
+
+.padding1 {
+    padding: var(--spacing1) 0;
+}
+
+.padding2 {
+    padding: var(--spacing2) 0;
+}
+
+.padding3 {
+    padding: var(--spacing3) 0;
+}
+
+.padding4 {
+    padding: var(--spacing4) 0;
+}
+
+.padding5 {
+    padding: var(--spacing5) 0;
+}
+
+.padding6 {
+    padding: var(--spacing6) 0;
+}
+
+.padding7 {
+    padding: var(--spacing7) 0;
+}
+
+.margin1 {
+    margin: var(--spacing1) auto;
+}
+
+.margin2 {
+    margin: var(--spacing2) auto;
+}
+
+.margin3 {
+    margin: var(--spacing3) auto;
+}
+
+.margin4 {
+    margin: var(--spacing4) auto;
+}
+
+.margin5 {
+    margin: var(--spacing5) auto;
+}
+
+.margin6 {
+    margin: var(--spacing6) auto;
+}
+
+.margin7 {
+    margin: var(--spacing7) auto;
+}
+.text-sm  { font-size: var(--font-sm); }
+.text-md  { font-size: var(--font-md); }
+.text-lg  { font-size: var(--font-lg); }
+.text-xl  { font-size: var(--font-xl); }
+
+.font-regular { font-weight: var(--weight-regular); }
+.font-bold    { font-weight: var(--weight-bold); }

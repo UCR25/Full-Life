@@ -1,0 +1,115 @@
+[
+  {
+    "user_ID": "105013398891910779346",
+    "event_list_ID": "000001",
+    "user_date_time": "2025-05-25T14:30:00Z",
+    "name": "Marathon Run",
+    "address": "123 man street",
+    "description": "you just be running",
+    "startTime": "2025-05-25T14:30:00Z",
+    "endTime": "2025-05-25T16:00:00Z",
+    "categories": [
+      "hiking",
+      "photography"
+    ]
+  },
+  {
+    "user_ID": "105013398891910779346",
+    "event_list_ID": "000001",
+    "user_date_time": "2025-05-25T14:30:00Z",
+    "name": "Walking",
+    "address": "Some Adress",
+    "description": "Does it need one?",
+    "startTime": "2025-05-25T14:30:00Z",
+    "endTime": "2025-05-25T16:00:00Z",
+    "categories": [
+      "guitar",
+      "sleeping"
+    ]
+  },
+  {
+    "user_ID": "105013398891910779346",
+    "event_list_ID": "000002",
+    "user_date_time": "2025-05-25T14:30:00Z",
+    "name": "STUFF",
+    "address": "STUFF street",
+    "description": "Boredom",
+    "startTime": "2025-05-25T14:30:00Z",
+    "endTime": "2025-05-25T16:00:00Z",
+    "categories": [
+      "stuff",
+      "this sucks"
+    ]
+  },
+  {
+    "user_ID": "123456789",
+    "event_list_ID": "000003",
+    "user_date_time": "2025-05-6T14:30:00Z",
+    "name": "Scotty's backyard cookout",
+    "address": "bear bear go away street",
+    "description": "cooking and eating",
+    "startTime": "2025-05-6T14:30:00Z",
+    "endTime": "2025-05-8T16:00:00Z",
+    "categories": [
+      "cooking",
+      "nearby"
+    ]
+  },
+  {
+    "user_ID": "999",
+    "event_list_ID": "listX",
+    "user_date_time": "2025-05-30T10:00:00Z",
+    "name": "Test Event",
+    "address": "123 Test Blvd",
+    "description": "Ensure create works",
+    "startTime": "2025-05-30T10:00:00Z",
+    "endTime": "2025-05-30T12:00:00Z",
+    "categories": [
+      "test",
+      "unit"
+    ]
+  },
+  {
+    "user_ID": "999",
+    "event_list_ID": "listX",
+    "user_date_time": "2025-05-30T10:00:00Z",
+    "name": "Test Event",
+    "address": "123 Test Blvd",
+    "description": "Ensure create works",
+    "startTime": "2025-05-30T10:00:00Z",
+    "endTime": "2025-05-30T12:00:00Z",
+    "categories": [
+      "test",
+      "unit"
+    ]
+  },
+  {
+    "user_ID": "999",
+    "event_list_ID": "listX",
+    "user_date_time": "2025-05-30T10:00:00Z",
+    "name": "Test Event",
+    "address": "123 Test Blvd",
+    "description": "Ensure create works",
+    "startTime": "2025-05-30T10:00:00Z",
+    "endTime": "2025-05-30T12:00:00Z",
+    "categories": [
+      "test",
+      "unit"
+    ]
+  },
+  {
+    "user_ID": "1",
+    "event_list_ID": "0",
+    "user_date_time": "2025-05-30T10:00:00Z",
+    "name": "Test Event",
+    "address": "TESTING",
+    "description": "Why does working on this take so long?",
+    "startTime": "2025-05-30T10:00:00Z",
+    "endTime": "2025-05-30T12:00:00Z",
+    "categories": [
+      "I",
+      "like",
+      "coding"
+    ]
+  }
+]
